@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import Link from 'next/link';
+'use client'
 
-const Login = () => {
+import { useState } from 'react';
+
+const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle login logic here
     console.log('Email:', email);
     console.log('Password:', password);
   };
@@ -18,14 +19,25 @@ const Login = () => {
         onSubmit={handleSubmit}
         className='space-y-6'
       >
-        <h1 className='font-bold text-2xl'>Login</h1>
-        <p className='font-light'>make everyday cooking EZ!</p>
+        <h1 className='font-bold text-2xl'>Sign Up</h1>
+        <p className='font-light'>Be a part of the creativity in food</p>
+        <div>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            placeholder='Username'
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="w-full p-3 rounded-xl shadow-sm bg-gray-300"
+          />
+        </div>
         <div>
           <input
             type="email"
             id="email"
             value={email}
-            placeholder='Username'
+            placeholder='Email'
             onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full p-3 rounded-xl shadow-sm bg-gray-300"
@@ -42,24 +54,16 @@ const Login = () => {
             className="w-full p-3 rounded-xl shadow-sm bg-gray-300"
           />
         </div>
+        <p>or</p>
         <button
           type="submit"
           className="w-full bg-dark-yellow p-2 rounded-xl"
         >
-          Login
+          Sign Up
         </button>
-        <p>or</p>
-        <p>No account yet?</p>
-        <Link
-          href="/signup"
-
-        >
-          <button className="w-full bg-dark-yellow p-2 rounded-xl">Sign up</button>
-
-        </Link>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
