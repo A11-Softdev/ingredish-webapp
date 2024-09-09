@@ -1,0 +1,13 @@
+services:
+  app:
+    image: ingredish
+    build:
+      context: ./
+      target: dev
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "5001:5001"
