@@ -10,4 +10,4 @@ services:
       - /app/node_modules
       - /app/.next
     ports:
-      - "5001:5001"
+      - "3000:3000"
