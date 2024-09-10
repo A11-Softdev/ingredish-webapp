@@ -53,7 +53,7 @@ const Login = () => {
         <p>or</p>
         <p>No account yet?</p>
         <Link
-          href="/signup"
+          href="/register"
 
         >
           <button className="w-full bg-dark-yellow p-2 rounded-xl">Sign up</button>
