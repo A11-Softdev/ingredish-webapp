@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Footer from "@/components/footer";
 import './globals.css';
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>{children}<Footer/></body>
     </html>
   );
 }
