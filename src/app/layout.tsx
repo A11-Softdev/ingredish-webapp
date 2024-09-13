@@ -1,9 +1,12 @@
 'use client';
 
+import NavBar from '@/components/NavBar';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Footer from "@/components/footer";
 import './globals.css';
+import {Providers} from "./providers";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const router = useRouter();
@@ -18,7 +21,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Providers>
+          <NavBar />
+          {children}
+          <Footer/>
+        </Providers>
+      </body>
     </html>
   );
 }
