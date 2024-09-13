@@ -12,7 +12,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     const token = Cookies.get('token');
 
     if (!token) {
-      router.push('/login');
+      //router.push('/login');
     }
   }, [router]);
 

@@ -14,6 +14,7 @@ import CreateIcon from '@mui/icons-material/Create';
 const creatBlog = () => {
   const [ingredients, setIngredients] = useState(['']);
   const [steps, setSteps] = useState(['']);
+  const [kitchenWare, setKitchenWare] = useState(['']);
 
   const addIngredient = () => {
     setIngredients([...ingredients, '']);
@@ -34,6 +35,16 @@ const creatBlog = () => {
     newSteps[index] = value;
     setSteps(newSteps);
   };
+
+  const addKitchenWare = () => {
+    setKitchenWare([...kitchenWare, '']);
+  }
+
+  const updateKitchenWare = (index: number, value: string) => {
+    const newKitchenWare = [...kitchenWare];
+    newKitchenWare[index] = value;
+    setKitchenWare(newKitchenWare);
+  }
 
   return (
     <div className='flex justify-center h-full'>
@@ -100,6 +111,27 @@ const creatBlog = () => {
             variant="contained" 
             startIcon={<AddIcon />}
             onClick={addIngredient}
+            className='bg-yellow-400 text-black mb-2'
+          >
+            ADD
+          </Button>
+        </div>
+        <h2 className='w-80 flex justify-center text-2xl font-medium my-3 pt-2 border-t-4 border-yellow-400'>KitchenWare</h2>
+        <div className='flex flex-col items-center'>
+          {kitchenWare.map((kitchenWare, index) => (
+            <TextField
+              key={index}
+              type="text"
+              value={kitchenWare}
+              onChange={(e) => updateKitchenWare(index, e.target.value)}
+              label={index+1}
+              className="my-2"
+            />
+          ))}
+          <Button 
+            variant="contained" 
+            startIcon={<AddIcon />}
+            onClick={addKitchenWare}
             className='bg-yellow-400 text-black mb-2'
           >
             ADD
