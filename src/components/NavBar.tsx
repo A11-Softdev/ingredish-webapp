@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter,useSearchParams } from "next/navigation";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import AvatarIcon from "./AvatarIcon";
@@ -8,6 +9,10 @@ interface User {
   name: string;
 }
 const NavBar = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q') || '';
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -29,7 +34,7 @@ const NavBar = () => {
         {isLoggedIn ? (
           <>
             <div className="max-w-lg w-full flex justify-center">
-              <SearchBox />
+              <SearchBox defaultValue={query}/>
             </div>
             <div className="max-w-md w-full flex justify-between items-center mr-5">
               <Link href="/" className="flex flex-col">
