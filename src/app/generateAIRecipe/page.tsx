@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShare } from "@fortawesome/free-solid-svg-icons/faShare";
 
 type FormValues = {
   recipeName: string;
@@ -86,6 +88,7 @@ const Page: React.FC = () => {
   };
 
   return (
+    <>
     <div className="flex w-full px-14 bg-slate-200">
       <div className="w-2/5 p-12 bg-white rounded-lg shadow-md">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -130,7 +133,7 @@ const Page: React.FC = () => {
                 name="allTools"
                 checked={formValues.allTools}
                 onChange={handleChange}
-                className="h-4 w-4 text-yellow-400 text-black focus:ring-yellow-500"
+                className="h-4 w-4 text-black focus:ring-yellow-500"
               />
               <label htmlFor="allTools" className="ml-2 text-lg text-gray-700">
                 All
@@ -166,38 +169,47 @@ const Page: React.FC = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className="bg-[#80AA50] text-white py-2 px-4 rounded hover:bg-blue-600"
           >
             Generate Recipe
           </button>
         </form>
       </div>
-      <div className="w-3/5 p-12">
-        <div className="text-center text-3xl font-bold mb-4">Result!</div>
+      <div className="w-3/5 px-12 pt-8 flex flex-col gap-4 justify-betweenbg-[#80AA50]">
+        <div className="text-center text-4xl font-bold mb-4">Result!</div>
         {
-          <div className="outputmenu border-black border-2 rounded-lg p-4">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Consectetur neque accusamus porro! Quibusdam qui totam dolorem esse
-            libero, recusandae officia obcaecati dolor maiores ad unde beatae
-            molestiae explicabo, itaque asperiores.
+          <div className="outputmenu bg-white border-slate-600 border-2 rounded-lg p-4 font-bold text-xl">
+            เมนูที่แนะนำ คือ {formValues.recipeName}
           </div>
         }
         {
-          <div className="outputingredient border-black border-2 rounded-lg p-4">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-          Consectetur neque accusamus porro! Quibusdam qui totam dolorem esse
-          libero, recusandae officia obcaecati dolor maiores ad unde beatae
-          molestiae explicabo, itaque asperiores.</div>
+          <div className="outputingredient flex-1 bg-white border-slate-600 border-2 rounded-lg p-4">
+          <span className="font-bold text-xl">วัตถุดิบ</span>
+          <ul className="list-disc ml-8">
+            {formValues.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+          </div>
         }
-        {<div className="outputmethod border-black border-2 rounded-lg p-4">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Consectetur neque accusamus porro! Quibusdam qui totam dolorem esse
-            libero, recusandae officia obcaecati dolor maiores ad unde beatae
-            molestiae explicabo, itaque asperiores.</div>}
-        {<div className="outputtip border-black border-2 rounded-lg p-4">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Consectetur neque accusamus porro! Quibusdam qui totam dolorem esse
-            libero, recusandae officia obcaecati dolor maiores ad unde beatae
-            molestiae explicabo, itaque asperiores.</div>}
+        {<div className="outputmethod flex-1 bg-white border-slate-600 border-2 rounded-lg p-4">
+          <span className="font-bold text-xl">วิธีทำ</span>
+          <ul className="list-decimal ml-8">
+            {formValues.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul></div>}
+        {<div className="outputtip flex-1 bg-white border-slate-600 border-2 rounded-lg p-4">
+          <span className="font-bold text-xl">เคล็ดลับ</span>
+          <ul className="list-disc ml-8">
+            {formValues.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul></div>}
       </div>
     </div>
+      <div className="flex w-full min-w-[100px] pt-8 justify-end bg-slate-200 text-white "><button className="mb-4 rounded-[30px] mr-[100px] p-4 px-12 font-bold text-lg bg-[#80AA50]"><FontAwesomeIcon className="mr-2" icon={faShare}/>แบ่งปันสูตรนี้</button></div>
+    </>
   );
 };
 
