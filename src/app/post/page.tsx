@@ -7,8 +7,10 @@ import {
   faClock,
   faUser,
   faCommentDots,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RatingBox from "@/components/RatingBox";
 
 export default function Page() {
   const params = useParams<{ postId: string }>();
@@ -126,24 +128,26 @@ export default function Page() {
         </div>
       </div>
       <div className="flex flex-col gap-3 grow">
-        <div
-          onClick={() => {
-            alert("Hello");
-          }}
+        <div className="p-4 rounded-lg border-black border-2 text-xl"
         >
-          {" "}
           Rating : 4.5/5.0
         </div>
-        <a>rate 1 2 3 4 5</a>
+        <RatingBox/>
         <button
           onClick={() => {}}
-          className="`px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
+          className="px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
+        >
+          <FontAwesomeIcon className="mr-2" icon={faHeart} /> ถูกใจสูตร
+        </button>
+        <button
+          onClick={() => {}}
+          className="px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
         >
           แก้ไขโพสต์
         </button>
         <button
           onClick={() => {}}
-          className="`px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
+          className="px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
         >
           ลบโพสต์
         </button>
