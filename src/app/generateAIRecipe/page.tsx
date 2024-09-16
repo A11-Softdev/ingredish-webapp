@@ -101,7 +101,7 @@ const Page: React.FC = () => {
               type="text"
               name="recipeName"
               id="recipeName"
-              className="w-full mt-2 rounded-lg text-black bg-[#F1C339] p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className="w-full mt-2 rounded-lg text-black bg-[#F1C339] placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               value={formValues.recipeName}
               onChange={handleChange}
               placeholder="Enter the dish name"
@@ -116,7 +116,7 @@ const Page: React.FC = () => {
                 key={index}
                 type="text"
                 name={index.toString()}
-                className="w-full rounded-lg bg-[#F1C339] text-black p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full rounded-lg bg-[#F1C339] text-black placeholder-white p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 value={ingredient}
                 onChange={handleChange}
                 placeholder={`Enter ingredient ${index + 1}`}
@@ -169,7 +169,7 @@ const Page: React.FC = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-[#80AA50] text-white py-2 px-4 rounded hover:bg-blue-600"
+            className="bg-[#80AA50] text-white py-2 px-4 rounded hover:bg-[#5b7938]"
           >
             Generate Recipe
           </button>
