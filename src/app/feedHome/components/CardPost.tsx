@@ -29,7 +29,7 @@ const CardPost: React.FC<CardProps> = ({ imageUrl, title, rating, userName, AIta
         <div className="absolute top-2 right-2">
           <button
             onClick={handleMenuToggle}
-            className="text-gray-600 hover:text-gray-800 focus:outline-none"
+            className="text-gray-600 hover:text-gray-800 focus:outline-none bg-yellow-400 rounded-md"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
