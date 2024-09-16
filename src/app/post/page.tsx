@@ -7,17 +7,23 @@ import {
   faClock,
   faUser,
   faCommentDots,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import RatingBox from "@/components/RatingBox";
+import Modal from "@mui/material/Modal";
 
 export default function Page() {
   const params = useParams<{ postId: string }>();
+  const [open, setOpen] = React.useState<boolean>(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <div className="flex flex-row w-3/5 p-10 gap-6 mx-auto b  g-zinc-100">
       <div className="flex flex-col gap-6 w-3/5 ">
-        <div className="bg-center max-h-[500px] bg-white">
+        <div className="bg-center max-h-[500px] bg-[url('/imageBox.svg')]">
           <img
-          className="w-full object-contain bg-center h-full"
+            className="w-full object-contain bg-center h-full"
             src={
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBe3aCKZdDJfdiCwyZCfUUXyuyC2nAd44ouw&s"
             }
@@ -81,7 +87,7 @@ export default function Page() {
             <li>ไข่ไก่ 20 ฟอง</li>
             <li>ไข่ไก่ 20 ฟอง</li>
             <li>ไข่ไก่ 20 ฟอง</li>
-            </ul>
+          </ul>
         </div>
         {/* Comment box*/}
         <div className="shadow-lg rounded-lg gap-3 p-4 bg-[#F1C339]">
@@ -126,28 +132,47 @@ export default function Page() {
         </div>
       </div>
       <div className="flex flex-col gap-3 grow">
-        <div
-          onClick={() => {
-            alert("Hello");
-          }}
-        >
-          {" "}
+        <div className="p-4 rounded-lg border-black border-2 text-xl">
           Rating : 4.5/5.0
         </div>
-        <a>rate 1 2 3 4 5</a>
+        <RatingBox />
         <button
           onClick={() => {}}
-          className="`px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
+          className="px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
+        >
+          <FontAwesomeIcon className="mr-2" icon={faHeart} /> ถูกใจสูตร
+        </button>
+        <button
+          onClick={() => {}}
+          className="px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
         >
           แก้ไขโพสต์
         </button>
         <button
-          onClick={() => {}}
-          className="`px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
+          onClick={() => {
+            setOpen(true);
+          }}
+          className="px-4 py-2 rounded-lg border-black border-2 hover:border-yellow-500"
         >
           ลบโพสต์
         </button>
       </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className="flex justify-center items-center w-full h-full">
+          <div className="w-[500px] py-6 bg-white flex flex-col gap-6 rounded-lg border-2 border-black">
+            <p className="text-center text-xl font-bold">ต้องการที่จะลบโพสต์นี้ใช่หรือไม่</p>
+            <div className="flex gap-6 w-full justify-evenly">
+              <button className="px-4 py-1 bg-yellow-300 hover:bg-[#F1C339] font-bold rounded-md">ยืนยัน</button>
+              <button className="px-4 py-1 bg-[#4D4D4E] hover:bg-[#39393a] font-bold rounded-md text-white" onClick={()=>{setOpen(false);}}>ยกเลิก</button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
