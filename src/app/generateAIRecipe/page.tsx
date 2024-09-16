@@ -175,7 +175,7 @@ const Page: React.FC = () => {
           </button>
         </form>
       </div>
-      <div className="w-3/5 px-12 pt-8 flex flex-col gap-4 justify-between bg-[#80AA50]">
+      <div className="w-3/5 px-12 pt-8 flex flex-col gap-4 justify-between ">
         <div className="text-center text-4xl font-bold mb-4">Result!</div>
         {
           <div className="outputmenu bg-white border-slate-600 border-2 rounded-lg p-4 font-bold text-xl">
