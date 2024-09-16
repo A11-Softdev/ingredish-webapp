@@ -4,7 +4,6 @@ export interface LongCardDataProps {
     time: string;
     portion: string;
     menu: string;
-    isByAI: boolean;
     id: number;
     rating: number;
     tools: string;
