@@ -65,10 +65,9 @@ const Page = (props: Props) => {
           <label htmlFor="address" className="font-bold">
             Address:{" "}
           </label>
-          <input
+          <textarea
             id="address"
             className="bg-[#F1C339] rounded-lg text-black grow ml-2"
-            type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
