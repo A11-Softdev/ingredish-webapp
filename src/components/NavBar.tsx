@@ -3,13 +3,18 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import AvatarIcon from "./AvatarIcon";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const NavBar = () => {
   const [isToken, setIsToken] = useState<boolean>(false);
 
+  const handleLogout = () => {
+    Cookies.remove("token");
+    setIsToken(false);
+  };
+
   useEffect(() => {
-    const token = Cookies.get('token');
+    const token = Cookies.get("token");
     if (token) {
       setIsToken(true);
     }
@@ -67,7 +72,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Cart</p>
             </Link>
-            <AvatarIcon />
+            <AvatarIcon onLogout={handleLogout} /> {/* Pass the handleLogout function */}
           </div>
         </>
       ) : (
