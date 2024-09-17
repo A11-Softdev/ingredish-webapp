@@ -1,7 +1,6 @@
 'use client';
 
 import Card from "./components/card";
-import Link from 'next/link';
 
 const Home = () => {
     return (
@@ -44,27 +43,31 @@ const Home = () => {
                 </div>
                 <h1 className="font-black text-4xl">Last Recipes</h1>
                 <div className="flex justify-around my-11">
-                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={true}/>
-                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={false}/>
-                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={true}/>
-                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={false}/>
+                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={true} />
+                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={false} />
+                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={true} />
+                    <Card imageSrc="/ai-cook.jpg" author="กร มีความสุข" name="ไข่ข้นปู" rating={4.4} isAIGenarated={false} />
                 </div>
             </div>
-            <div className="flex bg-gray-100 p-5 w-3/4">
+            <div className="flex bg-gray-100 p-5 w-3/4 justify-between">
                 <div>
                     <h2 className="font-black text-3xl my-3">Our Features</h2>
                     <p>Ingredish offers a suite of innovative tools to make your cooking</p>
                     <p>journey effortless, fun, and delicious through AI and our<br />communicaation</p>
                     <div className="flex my-3">
-                        <p className="font-bold text-base">Smart Recipes<br/><span className="font-normal text-sm">Generate customized recipes based on your dietary<br/>preferences, ingredients at hand, and cooking style.</span> </p>
+                        <img src="/tabler_file-text-ai-black.png" alt="" className="w-auto h-7 mr-3" />
+                        <p className="font-bold text-base">Smart Recipes<br /><span className="font-normal text-sm">Generate customized recipes based on your dietary<br />preferences, ingredients at hand, and cooking style.</span> </p>
                     </div>
                     <div className="flex my-3">
-                        <p className="font-bold text-base">Communication<br/><span className="font-normal text-sm">Generate customized recipes based on your dietary<br/>preferences, ingredients at hand, and cooking style.</span> </p>
+                        <img src="/basil_group-151-outline-black.png" alt="" className="w-auto h-7 mr-3" />
+                        <p className="font-bold text-base">Communication<br /><span className="font-normal text-sm">Generate customized recipes based on your dietary<br />preferences, ingredients at hand, and cooking style.</span> </p>
                     </div>
                     <div className="flex my-3">
-                        <p className="font-bold text-base">User's Shop<br/><span className="font-normal text-sm">Generate customized recipes based on your dietary<br/>preferences, ingredients at hand, and cooking style.</span> </p>
+                        <img src="/basil_shopping-bag-outline-black.png" alt="" className="w-auto h-7 mr-3" />
+                        <p className="font-bold text-base">User's Shop<br /><span className="font-normal text-sm">Generate customized recipes based on your dietary<br />preferences, ingredients at hand, and cooking style.</span> </p>
                     </div>
                 </div>
+                <img src="/spaghetti.png" alt="spaghetti" />
             </div>
         </div>
     );

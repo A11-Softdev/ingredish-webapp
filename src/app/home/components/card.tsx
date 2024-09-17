@@ -1,4 +1,5 @@
 'use client';
+import { BsThreeDots } from "react-icons/bs";
 
 interface CardProps {
   imageSrc: string;
@@ -13,8 +14,8 @@ const Card: React.FC<CardProps> = ({ imageSrc, author, name, rating, isAIGenarat
     <div className="p-3 border-black border-[1px] rounded-lg w-64">
       <div className="flex items-center justify-between">
         <p className="font-bold">{author}</p>
-        <button type="button" className="bg-yellow-500 rounded-xl px-2 py-1 text-sm">
-          ●●●
+        <button type="button" className="bg-yellow-500 rounded-xl px-2 text-sm">
+          <BsThreeDots className="text-xl" />
         </button>
       </div>
       <img src={imageSrc} alt={name} className="w-full h-48 rounded-2xl p-2 object-cover" />
