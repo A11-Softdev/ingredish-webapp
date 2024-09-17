@@ -1,0 +1,23 @@
+name: Build and deploy to Server
+
+on:
+  pull_request:
+    branches:
+      - dev
+  push:
+    branches:
+      - feat/setup-CI-CD
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Copy Repository
+        uses: actions/checkout@v4
+
+      - name: Running Docker Compose
+        run: docker compose up -d --build
