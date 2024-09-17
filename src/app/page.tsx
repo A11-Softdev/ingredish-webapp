@@ -1,9 +1,5 @@
-import AvatarIcon from "@/components/AvatarIcon";
-import NavBar from "@/components/NavBar";
-import Image from "next/image";
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-  return (
-    <>fsfdfs</>
-  );
+export default function HomeRedirect() {
+  redirect('/home');
 }
