@@ -8,14 +8,45 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 export default function page({ params }: { params: { id: string } }) {
   const id = params.id;
-  const product = {
-    img: "https://inwfile.com/s-ci/hyea80.jpg",
-    name: "มะเขือเทศ",
-    description: "มะเขือเทศ สดจากสวน ชุ่มฉ่ำ กรอบหวาน สุดอร่อย",
-    sold: 100,
-    amount: 50,
-    price: 20,
-  };
+  const shop = {name: "Shikanoko", owner: "Takanoko", description: "Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko", contact: "contact", address: "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345"};
+  const products = [
+    {
+      id: "1",
+      img: "https://inwfile.com/s-ci/hyea80.jpg",
+      name: "มะเขือเทศ",
+      description: "มะเขือเทศ สดจากสวน ชุ่มฉ่ำ กรอบหวาน สุดอร่อย",
+      sold: 100,
+      amount: 50,
+      price: 20,
+    },
+    {
+      id: "2",
+      img: "https://inwfile.com/s-ci/hyea80.jpg",
+      name: "มะเขือเทศ",
+      description: "มะเขือเทศ สดจากสวน ชุ่มฉ่ำ กรอบหวาน สุดอร่อย",
+      sold: 100,
+      amount: 50,
+      price: 20,
+    },
+    {
+      id: "3",
+      img: "https://inwfile.com/s-ci/hyea80.jpg",
+      name: "มะเขือเทศ",
+      description: "มะเขือเทศ สดจากสวน ชุ่มฉ่ำ กรอบหวาน สุดอร่อย",
+      sold: 100,
+      amount: 50,
+      price: 20,
+    },
+    {
+      id: "4",
+      img: "https://inwfile.com/s-ci/hyea80.jpg",
+      name: "มะเขือเทศ",
+      description: "มะเขือเทศ สดจากสวน ชุ่มฉ่ำ กรอบหวาน สุดอร่อย",
+      sold: 100,
+      amount: 50,
+      price: 20,
+    },
+  ];
   // useEffect(async() => {
   //     console.log(id);
   //     const shop = await axios(`/shop/${id}`);
@@ -36,14 +67,14 @@ export default function page({ params }: { params: { id: string } }) {
         {/* shop info */}
         <div className="flex flex-col bg-white border-2 border-black rounded-xl grow p-4">
           <div className="flex gap-2">
-            <span className="text-xl">{"shop.name"}</span>
-            <span className="flex items-end">{"shop.owner"}</span>
+            <span className="text-xl">{shop.name}</span>
+            <span className="flex items-end">{shop.owner}</span>
           </div>
-          <div className="mt-2">{"shop.description"}</div>
-          <div className="mt-2">{"shop.contact"}</div>
+          <div className="mt-2">{shop.description}</div>
+          <div className="mt-2">{shop.contact}</div>
           <div className="mt-2">
-            <FontAwesomeIcon icon={faLocationDot} className="mr-2"/>
-            {"shop.address"}
+            <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
+            {shop.address}
           </div>
         </div>
       </div>
@@ -51,16 +82,15 @@ export default function page({ params }: { params: { id: string } }) {
       <div className=""></div>
       {/* total product */}
       <div className="tracking-tight">
-        จำนวนสินค้า : {"shop.totalProduct"} รายการ
+        จำนวนสินค้า : {products.length} รายการ
       </div>
       {/* product list */}
       <div className="flex flex-col gap-4 lg:grid grid-cols-2 mt-2">
-        <ProductCard product={product}></ProductCard>
-        <ProductCard product={product}></ProductCard>
-        <ProductCard product={product}></ProductCard>
-        <ProductCard product={product}></ProductCard>
-        <ProductCard product={product}></ProductCard>
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </div>
+      
     </div>
   );
 }
