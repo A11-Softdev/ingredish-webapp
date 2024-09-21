@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { Input } from "@nextui-org/react";
 import { Tab, Tabs, Select, MenuItem, SelectChangeEvent} from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -164,6 +165,8 @@ export default function Page({ params }: { params: { id: string } }) {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+      <div className="flex justify-center my-10 space-x-2 w-full"><Pagination count={10} size="large" color="primary" /></div>
+
     </div>
   );
 }

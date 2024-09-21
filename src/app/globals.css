@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.css-mgtrg5-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected{
+    @apply bg-dark-yellow !important;
+
+}
+.css-mgtrg5-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected:hover{
+    @apply bg-yellow-600 !important;
+}
+
+.css-mgtrg5-MuiButtonBase-root-MuiPaginationItem-root:hover{
+    @apply bg-yellow-200 !important;
+}
+
+.css-mgtrg5-MuiButtonBase-root-MuiPaginationItem-root{
+    @apply text-xl font-bold !important;
+}
