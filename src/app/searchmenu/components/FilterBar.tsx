@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { FilterBarProps } from "../types/FilterBar";
+import { FilterBarProps, tools, sources } from "../types/FilterBar";
+import { source } from "framer-motion/client";
 const FilterBar: React.FC<FilterBarProps> = ({
   selectedTools,
   setSelectedTools,
@@ -9,28 +10,19 @@ const FilterBar: React.FC<FilterBarProps> = ({
   sortOption,
   setSortOption,
 }) => {
-  const tools: string[] = [
-    "ทั้งหมด",
-    "เตาอบ",
-    "เครื่องปั่น",
-    "ไมโครเวฟ",
-    "กระทะไฟฟ้า",
-    "หม้อนึ่ง",
-    "หม้อทอดไร้น้ำมัน",
-    "หม้อหุงข้าว",
-    "หม้ออบลมร้อน",
-  ];
-  const sources: string[] = ["ทั้งหมด", "AI", "ผู้ใช้งาน"];
   const [isClickSort, setIsClickSort] = useState<boolean>(false);
   const [isFilterClick, setIsFilterClick] = useState<boolean>(false);
-  const MAX_SELECTION = 7;
+  const MAX_SELECTION = 8;
   const elementRef = useRef<HTMLDivElement>(null);
 
   // Handle Click
   const handleClickOutside = (event: MouseEvent) => {
-    if (elementRef.current && !elementRef.current.contains(event.target as Node)) {
-      setIsClickSort(false); 
-      setIsFilterClick(false); 
+    if (
+      elementRef.current &&
+      !elementRef.current.contains(event.target as Node)
+    ) {
+      setIsClickSort(false);
+      setIsFilterClick(false);
     }
   };
 
@@ -44,30 +36,53 @@ const FilterBar: React.FC<FilterBarProps> = ({
 
   // Handle tool selection
   const handleToolChange = (tool: string) => {
-    setSelectedTools((prev) =>
-    {
-      if (prev.includes(tool))
-      {
-        return prev.filter((t) => t !== tool);
+    setSelectedTools((prev) => {
+      if (tool === "ทั้งหมด") {
+        if (prev.length === tools.length) {
+          return [];
+        } else {
+          const availableTools = tools.slice(
+            0,
+            MAX_SELECTION - selectedSource.length
+          );
+          return availableTools.length + selectedSource.length <= MAX_SELECTION
+            ? availableTools
+            : prev;
+        }
+      } else {
+        if (prev.includes(tool)) {
+          return prev.filter((t) => t !== tool);
+        } else if (prev.length + selectedSource.length <= MAX_SELECTION) {
+          return [...prev, tool];
+        }
+        return prev;
       }
-      else if (prev.length < MAX_SELECTION)
-      {
-        return [...prev, tool]
-      }
-      return prev;
-    }     
-    );
+    });
   };
 
   // Handle source selection
   const handleSourceChange = (source: string) => {
     setSelectedSource((prev) => {
-      if (prev.includes(source)) {
-        return prev.filter((s) => s !== source); 
-      } else if (prev.length < MAX_SELECTION) {
-        return [...prev, source]; 
+      if (source === "ทั้งหมด") {
+        if (prev.length === sources.length) {
+          return [];
+        } else {
+          const availableSources = sources.slice(
+            0,
+            MAX_SELECTION - selectedTools.length
+          );
+          return availableSources.length + selectedTools.length <= MAX_SELECTION
+            ? availableSources
+            : prev;
+        }
+      } else {
+        if (prev.includes(source)) {
+          return prev.filter((s) => s !== source);
+        } else if (prev.length + selectedTools.length <= MAX_SELECTION) {
+          return [...prev, source];
+        }
+        return prev;
       }
-      return prev; 
     });
   };
 
@@ -79,14 +94,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
 
   useEffect(() => {
     if (isClickSort || isFilterClick) {
-      document.addEventListener('mousedown', handleClickOutside); 
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside); 
+      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     // Cleanup the event listener when the component unmounts
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isClickSort, isFilterClick]);
 
@@ -94,91 +109,156 @@ const FilterBar: React.FC<FilterBarProps> = ({
     <div className="pt-10 z-50 relative">
       <div className="min-h-10 flex justify-between bg-[rgb(237,179,07)] rounded-md pl-3 pr-3">
         <div className="flex">
-          <button className="mr-2 font-semibold text-lg" onClick={handleFilterClick}>
+          <button
+            className="mr-2 font-semibold text-lg"
+            onClick={handleFilterClick}
+          >
             เลือก
           </button>
-          <div className="flex items-center">
+          <div className="flex items-center text-base font-medium">
             {selectedTools.length > 0 &&
               selectedTools.map((tool) => (
                 <span
                   key={tool}
-                  className=" min-h-6 bg-white flex items-center rounded-3xl pr-2 pl-2 mr-2"
+                  className=" min-h-6 bg-white flex items-center rounded-3xl mr-0.5 pl-1 pr-1"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="rounded-full mr-1"
+                  <button
+                    className="flex items-center"
                     onClick={() => handleToolChange(tool)}
-                    fill="none"
-                    width="15"
-                    height="15"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <rect width="24" height="24" fill="#426E86" />
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="rounded-full mr-1"
+                      fill="none"
+                      width="15"
+                      height="15"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect width="24" height="24" fill="#426E86" />
 
-                    <g clip-path="url(#clip0_429_10968)">
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                        stroke="#426E86"
-                        stroke-width="2.4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></circle>
-                      <path
-                        d="M15 9L9 15"
-                        stroke="#FFFFFF"
-                        stroke-width="2.4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                      <path
-                        d="M9 9L15 15"
-                        stroke="#FFFFFF"
-                        stroke-width="2.4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </g>
+                      <g clip-path="url(#clip0_429_10968)">
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="#426E86"
+                          stroke-width="2.4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></circle>
+                        <path
+                          d="M15 9L9 15"
+                          stroke="#FFFFFF"
+                          stroke-width="2.4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>
+                        <path
+                          d="M9 9L15 15"
+                          stroke="#FFFFFF"
+                          stroke-width="2.4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>
+                      </g>
 
-                    <defs>
-                      <clipPath id="clip0_429_10968">
-                        <rect
-                          width="24"
-                          height="24"
-                          fill="#426E86"
-                          rx="4"
-                          ry="4"
-                        />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  {tool}{" "}
+                      <defs>
+                        <clipPath id="clip0_429_10968">
+                          <rect
+                            width="24"
+                            height="24"
+                            fill="#426E86"
+                            rx="4"
+                            ry="4"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    {tool}{" "}
+                  </button>
                 </span>
               ))}
             {selectedSource.length > 0 &&
               selectedSource.map((source) => (
                 <span
                   key={source}
-                  className="min-h-6 bg-white flex items-center rounded-3xl pr-2 pl-2 mr-2 "
+                  className="min-h-6 bg-white flex items-center rounded-3xl mr-0.5 pl-1 pr-1"
                 >
+                  <button
+                    className="flex items-center"
+                    onClick={() => handleSourceChange(source)}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="rounded-full mr-1"
+                      fill="none"
+                      width="15"
+                      height="15"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect width="24" height="24" fill="#426E86" />
+
+                      <g clip-path="url(#clip0_429_10968)">
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="#426E86"
+                          stroke-width="2.4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></circle>
+                        <path
+                          d="M15 9L9 15"
+                          stroke="#FFFFFF"
+                          stroke-width="2.4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>
+                        <path
+                          d="M9 9L15 15"
+                          stroke="#FFFFFF"
+                          stroke-width="2.4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>
+                      </g>
+
+                      <defs>
+                        <clipPath id="clip0_429_10968">
+                          <rect
+                            width="24"
+                            height="24"
+                            fill="#426E86"
+                            rx="4"
+                            ry="4"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    {source}{" "}
+                  </button>
+                </span>
+              ))}
+            {(selectedTools.length > 0 || selectedSource.length > 0) && (
+              <div className="min-h-6 bg-[rgb(77,77,78)] flex items-center rounded-3xl text-white mr-0.5 pl-1 pr-1">
+                <button className="flex items-center" onClick={handleClear}>
                   <svg
                     viewBox="0 0 24 24"
                     className="rounded-full mr-1"
-                    onClick={() => handleSourceChange(source)}
                     fill="none"
                     width="15"
                     height="15"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <rect width="24" height="24" fill="#426E86" />
+                    <rect width="24" height="24" fill="#131313" />
 
                     <g clip-path="url(#clip0_429_10968)">
                       <circle
                         cx="12"
                         cy="12"
                         r="9"
-                        stroke="#426E86"
+                        stroke="#131313"
                         stroke-width="2.4"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -204,68 +284,15 @@ const FilterBar: React.FC<FilterBarProps> = ({
                         <rect
                           width="24"
                           height="24"
-                          fill="#426E86"
+                          fill="#131313"
                           rx="4"
                           ry="4"
                         />
                       </clipPath>
                     </defs>
                   </svg>
-                  {source}
-                </span>
-              ))}
-            {(selectedTools.length > 0 || selectedSource.length > 0) && (
-              <div className="min-h-6 bg-[rgb(77,77,78)] flex items-center rounded-3xl pr-2 pl-2 mr-2 text-white">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="rounded-full mr-1"
-                  onClick={handleClear}
-                  fill="none"
-                  width="15"
-                  height="15"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect width="24" height="24" fill="#131313" />
-
-                  <g clip-path="url(#clip0_429_10968)">
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="9"
-                      stroke="#131313"
-                      stroke-width="2.4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></circle>
-                    <path
-                      d="M15 9L9 15"
-                      stroke="#FFFFFF"
-                      stroke-width="2.4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></path>
-                    <path
-                      d="M9 9L15 15"
-                      stroke="#FFFFFF"
-                      stroke-width="2.4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></path>
-                  </g>
-
-                  <defs>
-                    <clipPath id="clip0_429_10968">
-                      <rect
-                        width="24"
-                        height="24"
-                        fill="#131313"
-                        rx="4"
-                        ry="4"
-                      />
-                    </clipPath>
-                  </defs>
-                </svg>
-                Clear all
+                  Clear all
+                </button>
               </div>
             )}
           </div>
@@ -302,7 +329,10 @@ const FilterBar: React.FC<FilterBarProps> = ({
       </div>
       <div>
         {isFilterClick && (
-          <div className="absolute left-2 bg-white border-1 border-black rounded-lg p-2 max-w-md w-full" ref={elementRef}>
+          <div
+            className="absolute left-2 bg-white border-1 border-black rounded-lg p-2 max-w-md w-full"
+            ref={elementRef}
+          >
             <h4>เครื่องมือ</h4>
             <div className="grid grid-cols-3">
               {tools.map((tool) => (
@@ -311,12 +341,12 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     type="checkbox"
                     checked={selectedTools.includes(tool)}
                     onChange={() => handleToolChange(tool)}
-                  />
+                  />{" "}
                   {tool}
                 </label>
               ))}
             </div>
-            
+
             <h4>สูตรจาก</h4>
             <div className="grid grid-cols-3">
               {sources.map((source) => (
@@ -325,7 +355,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     type="checkbox"
                     checked={selectedSource.includes(source)}
                     onChange={() => handleSourceChange(source)}
-                  />
+                  />{" "}
                   {source}
                 </label>
               ))}
@@ -333,7 +363,10 @@ const FilterBar: React.FC<FilterBarProps> = ({
           </div>
         )}
         {isClickSort && (
-          <div className="absolute -right-14 bg-white border-1 border-black rounded-lg p-2 pr-8 flex flex-col items-start font-medium text-medium" ref={elementRef}>
+          <div
+            className="absolute -right-14 bg-white border-1 border-black rounded-lg p-2 pr-8 flex flex-col items-start font-medium text-medium"
+            ref={elementRef}
+          >
             <button
               className="hover:text-[rgb(66,110,134)] "
               onClick={() => setSortOption("latest")}

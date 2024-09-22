@@ -5,22 +5,27 @@ import SettingCard from "./SettingCard";
 import FavIcon from "./FavIcon";
 
 const LongCard = ({
-  username,
-  description,
-  time,
-  portion,
-  menu,
-  id,
+  _id,
+  user_id,
+  name,
+  role,
+  image_url,
+  serve,
+  ingredient,
+  kitchentools,
+  recipe,
+  review,
+  createdAt,
   rating,
-  tools,
+  isGenByAI,
   source,
 }: LongCardDataProps) => {
   return (
-    <div className="w-full h-full max-h-32 max-w-xl flex justify-between border ">
-      <div className="pl-3 mt-3 w-full max-w-md ">
+    <div className="w-full h-full min-h-28 grid grid-cols-5 border">
+      <div className="grid col-span-4 z-0 ml-3 mt-3">
         <div className="flex">
-          <div className="text-lg font-semibold">{menu}</div>
-          {source == "AI" && (
+          <div className="text-lg font-semibold">{name}</div>
+          {isGenByAI && (
             <img
               src="/hugeicons_ai-chat-02.png"
               alt="Menu"
@@ -28,7 +33,7 @@ const LongCard = ({
             />
           )}
         </div>
-        <div>{description}</div>
+        <div>description</div>
 
         <div className="flex text-sm font-normal">
           <div className="flex items-center text-[rgb(136,136,136)] mr-2">
@@ -61,7 +66,7 @@ const LongCard = ({
                 ></path>{" "}
               </g>
             </svg>
-            {time}
+            {"1.00 ชม"}
           </div>
           <div className="flex items-center text-[rgb(136,136,136)] mr-2">
             <svg
@@ -82,7 +87,7 @@ const LongCard = ({
                 <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
               </g>
             </svg>
-            {portion}
+            {serve}
           </div>
           <div className="flex items-center">
             <svg
@@ -116,8 +121,8 @@ const LongCard = ({
         </div>
         <div className="flex justify-between">
           <div className=" flex gap-2 items-center">
-            {username}
-            {source == "AI" && (
+            {user_id}
+            {isGenByAI && (
               <div className="text-[rgb(66,110,134)] text-xs font-semibold">
                 หมายเหตุสูตรนี้มี Ref จาก A.I.
               </div>
@@ -128,15 +133,19 @@ const LongCard = ({
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative z-50">
         <div className="absolute right-0 m-2">
-          <SettingCard username={username} />
+          <SettingCard username={user_id} />
         </div>
-        <img
-          src="/bg_menu.png"
-          alt="default picture menu"
-          className="-z-10 h-full"
-        />
+        {image_url == null ? (
+          <img
+            src="/bg_menu.png"
+            alt="default picture menu"
+            className="-z-10 h-full"
+          />
+        ) : (
+          <img src={image_url} alt="\picture menu" className="-z-10 h-full" />
+        )}
       </div>
     </div>
   );

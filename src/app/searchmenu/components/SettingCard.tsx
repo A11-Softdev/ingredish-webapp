@@ -1,19 +1,43 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { LongCardDataProps } from "../types/LongCardTypes";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from "@nextui-org/react";
 import Link from "next/link";
 
 const SettingCard = ({ username }: { username: string }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isClick, setIsClick] = useState<boolean>(false);
   const elementRef = useRef<HTMLDivElement>(null);
-  const currentUser:string = "A";
+  const currentUser: string = "A";
+
+  // State to manage the input value
+  const [inputValue, setInputValue] = useState("");
+
+  // Handle input change
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  // Handle save action
+  const handleAction = () => {
+    console.log("Input Value:", inputValue); // Log or use the input value
+    onClose(); // Properly close the modal using `onClose`
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
       elementRef.current &&
-      !elementRef.current.contains(event.target as Node)
+      !elementRef.current.contains(event.target as Node) &&
+      !(event.target instanceof HTMLInputElement) // Exclude clicks on input elements
     ) {
-      setIsClick(false);
+      setIsClick(false); // Close or set state as needed
     }
   };
   const handleClick = () => {
@@ -27,7 +51,6 @@ const SettingCard = ({ username }: { username: string }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Cleanup the event listener when the component unmounts
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -35,46 +58,48 @@ const SettingCard = ({ username }: { username: string }) => {
 
   return (
     <div className="relative">
-      <svg
-        className="border-2 border-black rounded-md bg-white"
-        fill="#000000"
-        onClick={handleClick}
-        width="24px"
-        height="24px"
-        viewBox="0 0 32 32"
-        enable-background="new 0 0 32 32"
-        id="Glyph"
-        version="1.1"
-        xmlSpace="preserve"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <path
-            d="M16,13c-1.654,0-3,1.346-3,3s1.346,3,3,3s3-1.346,3-3S17.654,13,16,13z"
-            id="XMLID_287_"
-          ></path>
-          <path
-            d="M6,13c-1.654,0-3,1.346-3,3s1.346,3,3,3s3-1.346,3-3S7.654,13,6,13z"
-            id="XMLID_289_"
-          ></path>
-          <path
-            d="M26,13c-1.654,0-3,1.346-3,3s1.346,3,3,3s3-1.346,3-3S27.654,13,26,13z"
-            id="XMLID_291_"
-          ></path>
-        </g>
-      </svg>
+      <button onClick={handleClick}>
+        <svg
+          className="border-2 border-black rounded-md bg-white"
+          fill="#000000"
+          width="24px"
+          height="24px"
+          viewBox="0 0 32 32"
+          enable-background="new 0 0 32 32"
+          id="Glyph"
+          version="1.1"
+          xmlSpace="preserve"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <path
+              d="M16,13c-1.654,0-3,1.346-3,3s1.346,3,3,3s3-1.346,3-3S17.654,13,16,13z"
+              id="XMLID_287_"
+            ></path>
+            <path
+              d="M6,13c-1.654,0-3,1.346-3,3s1.346,3,3,3s3-1.346,3-3S7.654,13,6,13z"
+              id="XMLID_289_"
+            ></path>
+            <path
+              d="M26,13c-1.654,0-3,1.346-3,3s1.346,3,3,3s3-1.346,3-3S27.654,13,26,13z"
+              id="XMLID_291_"
+            ></path>
+          </g>
+        </svg>
+      </button>
+
       {isClick &&
         (username == currentUser ? (
           <div
             ref={elementRef}
-            className="w-full max-w-32 absolute left-2 bg-white border-2 border-black rounded-md"
+            className="min-w-32 absolute left-2 z-50 bg-white border-2 border-black rounded-md"
           >
             <Link href="/" className="flex hover:bg-[rgb(237,179,07)] p-2">
               <svg
@@ -103,7 +128,10 @@ const SettingCard = ({ username }: { username: string }) => {
               </svg>
               แก้ไขโพสต์
             </Link>
-            <Link href="/" className="flex hover:bg-[rgb(237,179,07)] p-2">
+            <Link
+              href="/"
+              className="flex hover:bg-[rgb(237,179,07)] p-2 rounded-md"
+            >
               <svg
                 viewBox="0 0 24 24"
                 width="24"
@@ -147,9 +175,12 @@ const SettingCard = ({ username }: { username: string }) => {
         ) : (
           <div
             ref={elementRef}
-            className="w-full max-w-32 absolute left-2 bg-white border-2 border-black rounded-md"
+            className="w-full min-w-32 absolute left-2 bg-white border-2 border-black rounded-md"
           >
-            <Link href="/" className="flex hover:bg-[rgb(237,179,07)] p-2">
+            <Button
+              className="w-full bg-white flex hover:bg-[rgb(237,179,07)] p-2 rounded-md"
+              onPress={onOpen}
+            >
               <svg
                 width="24px"
                 height="24px"
@@ -170,7 +201,45 @@ const SettingCard = ({ username }: { username: string }) => {
                 </g>
               </svg>
               ร้องเรียน
-            </Link>
+            </Button>
+            <Modal
+              isOpen={isOpen}
+              onOpenChange={(open) => (open ? onOpen() : onClose())}
+            >
+              <ModalContent>
+                {(close) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1 text-center">
+                      ต้องการที่จะร้องเรียนโพสต์นี้ด้วยเหตุผลใด
+                    </ModalHeader>
+                    <ModalBody>
+                      <p>อธิบายเหตุผล:</p>
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        placeholder="Type here..."
+                        style={{
+                          width: "100%",
+                          padding: "8px",
+                          marginTop: "10px",
+                        }}
+                      />
+                    </ModalBody>
+                    <ModalFooter>
+                      {/* Button to close the modal */}
+                      <Button color="danger" variant="light" onPress={close}>
+                        Close
+                      </Button>
+                      {/* Button to save the input and close the modal */}
+                      <Button color="primary" onPress={handleAction}>
+                        Save
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
         ))}
     </div>
