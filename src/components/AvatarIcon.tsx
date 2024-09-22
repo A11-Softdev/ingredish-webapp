@@ -2,12 +2,25 @@
 import React, { useState } from "react";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
-const AvatarIcon: React.FC = () => {
+interface AvatarIconProps {
+  onLogout: () => void;
+}
+
+const AvatarIcon: React.FC<AvatarIconProps> = ({ onLogout }) => {
   const [isClick, setIsClick] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleClick = () => {
     setIsClick(!isClick);
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    onLogout();
+    router.push("/login");
   };
 
   return (
@@ -33,7 +46,10 @@ const AvatarIcon: React.FC = () => {
           >
             My Shop
           </Link>
-          <button className="w-full p-2 hover:bg-[rgb(34,34,34)] hover:text-[rgb(237,179,07)] text-center rounded">
+          <button
+            onClick={handleLogout} // Logout and clear cookies
+            className="w-full p-2 hover:bg-[rgb(34,34,34)] hover:text-[rgb(237,179,07)] text-center rounded"
+          >
             Log out
           </button>
         </div>
