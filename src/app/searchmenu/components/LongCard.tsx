@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LongCardDataProps } from "../types/LongCardTypes";
 import SettingCard from "./SettingCard";
 import FavIcon from "./FavIcon";
+import { fetchUser } from "../api/getUser";
+import Link from "next/link";
 
 const LongCard = ({
   _id,
@@ -20,10 +22,30 @@ const LongCard = ({
   isGenByAI,
   source,
 }: LongCardDataProps) => {
+  const [username, setUsername] = useState<string>("unknow");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUser = async (id: string) => {
+      try {
+        setLoading(true);
+        const temp = await fetchUser(id);
+        console.log("Fetched data:", temp);
+        setUsername(temp);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setError("Failed to load blogs.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getUser(user_id);
+  });
   return (
-    <div className="w-full h-full min-h-28 grid grid-cols-5 border">
-      <div className="grid col-span-4 z-0 ml-3 mt-3">
-        <div className="flex">
+    <div className="w-full h-full min-h-28 grid grid-cols-5 border z-0">
+      <div className="grid col-span-4 z-0 ml-3 mt-3 ">
+        <Link href={`/home`} key={_id} className="flex -z-10">
           <div className="text-lg font-semibold">{name}</div>
           {isGenByAI && (
             <img
@@ -32,8 +54,17 @@ const LongCard = ({
               className="size-6 relative -top-2 left-1"
             />
           )}
+        </Link>
+
+        <div className="flex">
+          {ingredient.map((ingre, index) => (
+            <p key={ingre} className="mr-1">
+              {ingre}
+              {index < ingredient.length - 1 && " •"}{" "}
+              {/* Add " •" only if it's not the last item */}
+            </p>
+          ))}
         </div>
-        <div>description</div>
 
         <div className="flex text-sm font-normal">
           <div className="flex items-center text-[rgb(136,136,136)] mr-2">
@@ -115,13 +146,13 @@ const LongCard = ({
                 ></path>{" "}
               </g>
             </svg>
-            {rating}
-            {"/5"}
+            {/* {rating} */}
+            {"4/5"}
           </div>
         </div>
         <div className="flex justify-between">
           <div className=" flex gap-2 items-center">
-            {user_id}
+            {username}
             {isGenByAI && (
               <div className="text-[rgb(66,110,134)] text-xs font-semibold">
                 หมายเหตุสูตรนี้มี Ref จาก A.I.
@@ -135,7 +166,7 @@ const LongCard = ({
 
       <div className="relative z-50">
         <div className="absolute right-0 m-2">
-          <SettingCard username={user_id} />
+          <SettingCard username={username} />
         </div>
         {image_url == null ? (
           <img

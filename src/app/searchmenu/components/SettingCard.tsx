@@ -99,7 +99,7 @@ const SettingCard = ({ username }: { username: string }) => {
         (username == currentUser ? (
           <div
             ref={elementRef}
-            className="min-w-32 absolute left-2 z-50 bg-white border-2 border-black rounded-md"
+            className="min-w-32 absolute right-0 z-50 bg-white border-2 border-black rounded-md"
           >
             <Link href="/" className="flex hover:bg-[rgb(237,179,07)] p-2">
               <svg
@@ -175,7 +175,7 @@ const SettingCard = ({ username }: { username: string }) => {
         ) : (
           <div
             ref={elementRef}
-            className="w-full min-w-32 absolute left-2 bg-white border-2 border-black rounded-md"
+            className="w-full min-w-32 absolute right-0 z-50 bg-white border-2 border-black rounded-md"
           >
             <Button
               className="w-full bg-white flex hover:bg-[rgb(237,179,07)] p-2 rounded-md"

@@ -364,7 +364,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         )}
         {isClickSort && (
           <div
-            className="absolute -right-14 bg-white border-1 border-black rounded-lg p-2 pr-8 flex flex-col items-start font-medium text-medium"
+            className="absolute -right-14 z-50 bg-white border-1 border-black rounded-lg p-2 pr-8 flex flex-col items-start font-medium text-medium"
             ref={elementRef}
           >
             <button

@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import FilterBar from "./components/FilterBar";
 import { LongCardDataProps, BlogsProps } from "./types/LongCardTypes";
 import { fetchBlogs } from "./api/blogs";
+
+
 import LongCard from "./components/LongCard";
 
 const SearchMenu = () => {
@@ -48,13 +50,15 @@ const SearchMenu = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
+
   // Handle filtering and sorting
   const filteredItems = blogs
     ?.filter(
       (item) =>
         (selectedTools.length === 0 ||
           item.kitchentools.some((tool) => selectedTools.includes(tool))) &&
-        (selectedSource.length === 0 || selectedSource.includes(item.source))
+        (selectedSource.length === 0 ||
+          selectedSource.includes(item.isGenByAI === true ? "AI" : "ผู้ใช้งาน"))
     )
     .sort((a, b) => {
       if (sortOption === "latest") {
@@ -96,22 +100,23 @@ const SearchMenu = () => {
         <div className="mt-2 mb-2 w-full border border-black"></div>
         <div className="grid grid-cols-2 gap-2">
           {filteredItems?.slice(0, 10).map((blog) => (
-            <LongCard 
-            _id={blog._id}
-            user_id={blog.user_id}
-            name={blog.name}
-            role={blog.role}
-            image_url={blog.image_url}
-            serve={blog.serve}
-            ingredient={blog.ingredient}
-            kitchentools={blog.kitchentools}
-            recipe={blog.recipe}
-            review={blog.review}
-            createdAt={blog.createdAt}
-            rating={blog.rating}
-            isGenByAI={true}
-            source={blog.source}
+            <LongCard
+              _id={blog._id}
+              user_id={blog.user_id}
+              name={blog.name}
+              role={blog.role}
+              image_url={blog.image_url}
+              serve={blog.serve}
+              ingredient={blog.ingredient}
+              kitchentools={blog.kitchentools}
+              recipe={blog.recipe}
+              review={blog.review}
+              createdAt={blog.createdAt}
+              rating={blog.rating}
+              isGenByAI={blog.isGenByAI}
+              source={blog.source}
             />
+
             // <li key={blog._id}>
             //   <h2>{blog.name}</h2>
             //   <p>{blog.user_id}</p>
@@ -130,29 +135,6 @@ const SearchMenu = () => {
         </div>
       </ul>
     </div>
-    // <div className="ml-28 mr-28 m-auto pt-14">
-    //   {query && (
-    //     <>
-    //       <div className="text-3xl font-semibold text-center">
-    //         สูตรจาก '{query}'
-    //       </div>
-    //     </>
-    //   )}
-    //   <FilterBar
-    //     selectedTools={selectedTools}
-    //     setSelectedTools={setSelectedTools}
-    //     selectedSource={selectedSource}
-    //     setSelectedSource={setSelectedSource}
-    //     sortOption={sortOption}
-    //     setSortOption={setSortOption}
-    //   />
-    //   <div className="mt-2 mb-2 w-full border border-black"></div>
-    //   <div className="grid grid-cols-2 gap-2">
-    //     {filteredItems.slice(0, 20).map((item) => (
-    //       <div key={item._id}>{item.name}</div>
-    //     ))}
-    //   </div>
-    // </div>
   );
 };
 
