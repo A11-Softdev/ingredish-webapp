@@ -227,14 +227,14 @@ const SettingCard = ({ username }: { username: string }) => {
                       />
                     </ModalBody>
                     <ModalFooter>
-                      {/* Button to close the modal */}
-                      <Button color="danger" variant="light" onPress={close}>
-                        Close
-                      </Button>
-                      {/* Button to save the input and close the modal */}
-                      <Button color="primary" onPress={handleAction}>
-                        Save
-                      </Button>
+                      <div className="w-full flex justify-around ">
+                        <Button className="bg-[rgb(237,179,07)] font-semibold text-lg" onPress={handleAction}>
+                          ยืนยัน
+                        </Button>
+                        <Button className="bg-[rgb(77,77,78)] text-white font-semibold text-lg" variant="light" onPress={close}>
+                          ยกเลิก
+                        </Button>
+                      </div>
                     </ModalFooter>
                   </>
                 )}
