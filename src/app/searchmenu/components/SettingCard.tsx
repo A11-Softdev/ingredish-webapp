@@ -13,6 +13,7 @@ import Link from "next/link";
 
 const SettingCard = ({ username }: { username: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [activeModal, setActiveModal] = useState<number>(0);
   const [isClick, setIsClick] = useState<boolean>(false);
   const elementRef = useRef<HTMLDivElement>(null);
   const currentUser: string = "A";
@@ -25,10 +26,16 @@ const SettingCard = ({ username }: { username: string }) => {
     setInputValue(event.target.value);
   };
 
-  // Handle save action
-  const handleAction = () => {
-    console.log("Input Value:", inputValue); // Log or use the input value
-    onClose(); // Properly close the modal using `onClose`
+  // Handle the close action to reset to the first modal
+  const handleClose = () => {
+    onClose();
+    setActiveModal(0); // Reset to the first modal when closing
+  };
+
+  // Handle submit button in the first modal
+  const handleSubmit = () => {
+    console.log("Input Value:", inputValue);
+    setActiveModal(1); // Switch to the second modal
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -204,37 +211,91 @@ const SettingCard = ({ username }: { username: string }) => {
             </Button>
             <Modal
               isOpen={isOpen}
+              onClose={handleClose}
               onOpenChange={(open) => (open ? onOpen() : onClose())}
             >
               <ModalContent>
                 {(close) => (
                   <>
                     <ModalHeader className="flex flex-col gap-1 text-center">
-                      ต้องการที่จะร้องเรียนโพสต์นี้ด้วยเหตุผลใด
+                      {activeModal === 0
+                        ? "ต้องการที่จะร้องเรียนโพสต์นี้ด้วยเหตุผลใด"
+                        : ""}
                     </ModalHeader>
                     <ModalBody>
-                      <p>อธิบายเหตุผล:</p>
-                      <input
-                        type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        placeholder="Type here..."
-                        style={{
-                          width: "100%",
-                          padding: "8px",
-                          marginTop: "10px",
-                        }}
-                      />
+                      {activeModal === 0 ? (
+                        <>
+                          <p>อธิบายเหตุผล:</p>
+                          <input
+                            type="text"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            placeholder="Type here..."
+                            style={{
+                              width: "100%",
+                              padding: "8px",
+                              marginTop: "10px",
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <div className="text-center m-auto">
+                          <svg
+                            fill="#80AA50"
+                            version="1.1"
+                            id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 24.00 24.00"
+                            xmlSpace="preserve"
+                            width="124px"
+                            height="124px"
+                            stroke="#80AA50"
+                            transform="matrix(1, 0, 0, 1, 0, 0)"
+                            strokeWidth="0.00024000000000000003"
+                            className="m-auto"
+                          >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              stroke="#CCCCCC"
+                              strokeWidth="0.048"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              <path d="M19.2,4.4L2.9,10.7c-1.1,0.4-1.1,1.1-0.2,1.3l4.1,1.3l1.6,4.8c0.2,0.5,0.1,0.7,0.6,0.7c0.4,0,0.6-0.2,0.8-0.4 c0.1-0.1,1-1,2-2l4.2,3.1c0.8,0.4,1.3,0.2,1.5-0.7l2.8-13.1C20.6,4.6,19.9,4,19.2,4.4z M17.1,7.4l-7.8,7.1L9,17.8L7.4,13l9.2-5.8 C17,6.9,17.4,7.1,17.1,7.4z"></path>
+                              <rect
+                                y="0"
+                                fill="none"
+                                width="24"
+                                height="24"
+                              ></rect>
+                            </g>
+                          </svg>
+                          <p>ขอบคุณที่ช่วยดูแล community ของพวกเรา</p>
+                          <p>เราได้ส่งคำร้องเรียนให้ผู้ดูแลระบบแล้ว</p>
+                        </div>
+                      )}
                     </ModalBody>
                     <ModalFooter>
-                      <div className="w-full flex justify-around ">
-                        <Button className="bg-[rgb(237,179,07)] font-semibold text-lg" onPress={handleAction}>
-                          ยืนยัน
-                        </Button>
-                        <Button className="bg-[rgb(77,77,78)] text-white font-semibold text-lg" variant="light" onPress={close}>
-                          ยกเลิก
-                        </Button>
-                      </div>
+                      {activeModal === 0 && (
+                        <div className="w-full flex justify-around ">
+                          <Button
+                            className="bg-[rgb(237,179,07)] font-semibold text-lg"
+                            onPress={handleSubmit}
+                          >
+                            ยืนยัน
+                          </Button>
+                          <Button
+                            className="bg-[rgb(77,77,78)] text-white font-semibold text-lg"
+                            variant="light"
+                            onPress={close}
+                          >
+                            ยกเลิก
+                          </Button>
+                        </div>
+                      )}
                     </ModalFooter>
                   </>
                 )}
