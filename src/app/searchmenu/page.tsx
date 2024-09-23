@@ -6,7 +6,6 @@ import FilterBar from "./components/FilterBar";
 import { LongCardDataProps, BlogsProps } from "./types/LongCardTypes";
 import { fetchBlogs } from "./api/blogs";
 
-
 import LongCard from "./components/LongCard";
 
 const SearchMenu = () => {
@@ -28,6 +27,7 @@ const SearchMenu = () => {
         setLoading(true);
         const temp = await fetchBlogs();
         console.log("Fetched data:", temp);
+
         setBlogs(temp.data);
         setNumpage(temp.page);
 
@@ -58,7 +58,10 @@ const SearchMenu = () => {
         (selectedTools.length === 0 ||
           item.kitchentools.some((tool) => selectedTools.includes(tool))) &&
         (selectedSource.length === 0 ||
-          selectedSource.includes(item.isGenByAI === true ? "AI" : "ผู้ใช้งาน"))
+          selectedSource.includes(
+            item.isGenByAI === true ? "AI" : "ผู้ใช้งาน"
+          )) &&
+        (item.name.toLowerCase().includes(query?.toLowerCase()) || item.ingredient.some(ingre => ingre.toLowerCase().includes(query?.toLowerCase() || '')))
     )
     .sort((a, b) => {
       if (sortOption === "latest") {
