@@ -61,7 +61,10 @@ const SearchMenu = () => {
           selectedSource.includes(
             item.isGenByAI === true ? "AI" : "ผู้ใช้งาน"
           )) &&
-        (item.name.toLowerCase().includes(query?.toLowerCase()) || item.ingredient.some(ingre => ingre.toLowerCase().includes(query?.toLowerCase() || '')))
+        (item.name.toLowerCase().includes(query?.toLowerCase()) ||
+          item.ingredient.some((ingre) =>
+            ingre.toLowerCase().includes(query?.toLowerCase() || "")
+          ))
     )
     .sort((a, b) => {
       if (sortOption === "latest") {
