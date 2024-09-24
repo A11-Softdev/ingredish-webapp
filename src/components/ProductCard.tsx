@@ -12,7 +12,7 @@ import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 
-interface Props {
+interface Product {
   id: string;
   img: string;
   name: string;
@@ -22,7 +22,7 @@ interface Props {
   price: number;
 }
 
-export default function ProductCard({ product }: { product: Props }) {
+export default function ProductCard({ product,manage }: { product: Product,manage:boolean }) {
   const [open, setOpen] = React.useState<boolean>(false);
   const router = useRouter();
   const handleOpen = (event: React.MouseEvent) => {
@@ -68,6 +68,8 @@ export default function ProductCard({ product }: { product: Props }) {
         <span>จำนวนคงเหลือ : {product.amount}</span>
         <span className="text-lg font-bold">ราคา {product.price} บาท</span>
       </div>
+      {/* Dropdown */}
+      {manage &&(
       <div className="absolute top-4 right-4">
         <Dropdown>
           <DropdownTrigger>
@@ -96,6 +98,8 @@ export default function ProductCard({ product }: { product: Props }) {
           </DropdownMenu>
         </Dropdown>
       </div>
+      )}
+      {/* Modal */}
       <Modal
         open={open}
         onClose={handleClose}

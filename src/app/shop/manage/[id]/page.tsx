@@ -5,10 +5,11 @@ import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input } from "@nextui-org/react";
-import { Tab, Tabs, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Tab, Tabs, Select, MenuItem, SelectChangeEvent} from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import ShopCard from "@/components/ShopCard";
 import { useRouter } from "next/navigation";
+
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -18,13 +19,12 @@ export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   const shop = {
-    id: "1234",
+    id : "1234",
     name: "Shikanoko",
     owner: "Takanoko",
     description: "Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko",
     contact: "contact",
-    address:
-      "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345",
+    address: "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345",
   };
 
   const products = [
@@ -78,6 +78,8 @@ export default function Page({ params }: { params: { id: string } }) {
   // Handle tab change (filtering by popular/all)
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+    console.log("new",newValue);
+    console.log("tab",tabValue);
   };
 
   // Handle sort option change
@@ -115,28 +117,21 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className="flex w-[85vw] min-h-[81vh] mx-auto bg-background flex-col">
       {/* shop-detail */}
-      <ShopCard shop={shop} manage={false} />
+      <ShopCard shop={shop} manage={true}/>
 
       {/* Tabs, Filter, Search */}
       <div className="flex w-full justify-evenly items-center  border-b-2 border-gray-300 ">
         {/* Tabs on the Left */}
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          aria-label="product category tabs"
-          className="flex-1"
-        >
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="product category tabs" className="flex-1">
           <Tab label="สินค้าทั้งหมด" />
-          <Tab label="สินค้ายอดนิยม" />
+          <Tab label="เพิ่มสินค้า" />
+          <div onClick={()=>{router.push(`/shop/manage/${shop.id}`)}} className="px-4 py-3 ml-4 hover:cursor-pointer hover:bg-[#fff6c2] tracking-tight text-[16px]">
+            ดู Orders
+          </div>
         </Tabs>
         {/* Sort Filter in the Middle */}
         <div className="flex-1 flex justify-center bg-dark-yellow p-2 items-center gap-8">
-          <Select
-            value={sortOption}
-            onChange={handleSortChange}
-            className="min-w-[200px] bg-white"
-            displayEmpty
-          >
+          <Select value={sortOption} onChange={handleSortChange} className="min-w-[200px] bg-white" displayEmpty>
             <MenuItem value="A-Z">เรียงตามตัวอักษร A-Z</MenuItem>
             <MenuItem value="Z-A">เรียงตามตัวอักษร Z-A</MenuItem>
             <MenuItem value="low-high">ราคา: น้อยไปมาก</MenuItem>
@@ -145,32 +140,23 @@ export default function Page({ params }: { params: { id: string } }) {
             <MenuItem value="sold-least">ยอดขาย: น้อยไปมาก</MenuItem>
           </Select>
 
-          {/* Search Bar on the Right */}
-          <Input
-            placeholder="ค้นหาสินค้า..."
-            onChange={handleSearchChange}
-            isClearable
-            onClear={() => {
-              setSearchQuery("");
-            }}
-          />
+
+        {/* Search Bar on the Right */}
+          <Input placeholder="ค้นหาสินค้า..."  onChange={handleSearchChange} isClearable onClear={()=>{setSearchQuery("")}}/>
         </div>
       </div>
 
       {/* Total product count */}
-      <div className="tracking-tight">
-        จำนวนสินค้า : {displayedProducts.length} รายการ
-      </div>
+      <div className="tracking-tight">จำนวนสินค้า : {displayedProducts.length} รายการ</div>
 
       {/* Product List */}
       <div className="flex flex-col gap-4 lg:grid grid-cols-2 mt-2">
         {displayedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} manage={false} />
+          <ProductCard key={product.id} product={product} manage={true}/>
         ))}
       </div>
-      <div className="flex justify-center my-10 space-x-2 w-full">
-        <Pagination count={10} size="large" color="primary" />
-      </div>
+      <div className="flex justify-center my-10 space-x-2 w-full"><Pagination count={10} size="large" color="primary" /></div>
+
     </div>
   );
 }
