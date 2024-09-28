@@ -12,7 +12,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   const [isClickSort, setIsClickSort] = useState<boolean>(false);
   const [isFilterClick, setIsFilterClick] = useState<boolean>(false);
-  const MAX_SELECTION = 8;
+  const MAX_SELECTION = 9;
   const elementRef = useRef<HTMLDivElement>(null);
 
   // Handle Click
