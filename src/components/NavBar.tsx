@@ -1,11 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter,useSearchParams } from "next/navigation";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import AvatarIcon from "./AvatarIcon";
 import Cookies from "js-cookie";
 
 const NavBar = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q') || '';
   const [isToken, setIsToken] = useState<boolean>(false);
 
   const handleLogout = () => {
@@ -29,7 +33,7 @@ const NavBar = () => {
       {isToken ? (
         <>
           <div className="max-w-lg w-full flex justify-center">
-            <SearchBox />
+            <SearchBox defaultValue={query}/>
           </div>
           <div className="max-w-md w-full flex justify-between items-center mr-5">
             <Link href="/" className="flex flex-col">
