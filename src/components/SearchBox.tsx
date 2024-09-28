@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, ChangeEvent, KeyboardEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface SearchBoxProps {
   defaultValue: string;
@@ -8,6 +8,7 @@ interface SearchBoxProps {
 
 const SearchBox = ({ defaultValue }: SearchBoxProps) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [inputValue, setValue] = useState<string>(defaultValue);
 
@@ -18,7 +19,15 @@ const SearchBox = ({ defaultValue }: SearchBoxProps) => {
 
   const handleSearch = () => {
     if (inputValue.trim()) {
-      router.push(`/searchmenu/?q=${encodeURIComponent(inputValue)}`);
+      if (pathname == "/searchIngredient")
+      {
+        router.push(`/searchIngredient/?q=${encodeURIComponent(inputValue)}`);
+      }
+      else
+      {
+        router.push(`/searchmenu/?q=${encodeURIComponent(inputValue)}`);
+      }
+      
     } else {
       router.push("/");
     }
