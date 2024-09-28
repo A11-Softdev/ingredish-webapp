@@ -68,7 +68,7 @@ const Sort: React.FC<SortProps> = ({setSortOption, sortOption}) => {
       </div>
       {isClick && (
         <div
-          className="absolute z-50 flex flex-col items-start border-1.5 border-black rounded-md m-2 min-w-40 font-medium text-medium"
+          className="absolute z-50 flex flex-col items-start border-1.5 border-black rounded-md m-2 min-w-40 font-medium text-medium bg-white"
           ref={elementRef}
         >
           <button className="ml-2 mt-1 hover:text-[rgb(66,110,134)]" onClick={()=>setSortOption("latest")}>
@@ -86,15 +86,10 @@ const Sort: React.FC<SortProps> = ({setSortOption, sortOption}) => {
           <button className="ml-2 hover:text-[rgb(66,110,134)]"onClick={()=>setSortOption("productAsc")}>
             ชื่อสินค้า ก-ฮ,A-Z
           </button>
-          <button className="ml-2 hover:text-[rgb(66,110,134)]"onClick={()=>setSortOption("productDesc")}>
+          <button className="ml-2 mb-1 hover:text-[rgb(66,110,134)]"onClick={()=>setSortOption("productDesc")}>
             ชื่อสินค้า ฮ-ก,Z-A
           </button>
-          <button className="ml-2 hover:text-[rgb(66,110,134)]"onClick={()=>setSortOption("shopAsc")}>
-            ชื่อร้านค้า ก-ฮ,A-Z
-          </button>
-          <button className="ml-2 mb-1 hover:text-[rgb(66,110,134)]" onClick={()=>setSortOption("shopDesc")}>
-            ชื่อร้านค้า ฮ-ก,Z-A
-          </button>
+          
         </div>
       )}
     </div>
