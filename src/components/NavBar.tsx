@@ -60,7 +60,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Post</p>
             </Link>
-            <Link href="/" className="flex flex-col">
+            <Link href="/searchIngredient" className="flex flex-col">
               <img
                 src="/basil_shopping-bag-outline.png"
                 alt="Shop Icon"
