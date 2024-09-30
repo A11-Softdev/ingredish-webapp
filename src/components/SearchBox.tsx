@@ -1,7 +1,43 @@
 "use client";
-import React from "react";
+import React, { useState, ChangeEvent, KeyboardEvent } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
-const SearchBox = () => {
+interface SearchBoxProps {
+  defaultValue: string;
+}
+
+const SearchBox = ({ defaultValue }: SearchBoxProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [inputValue, setValue] = useState<string>(defaultValue);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    setValue(inputValue);
+  };
+
+  const handleSearch = () => {
+    if (inputValue.trim()) {
+      if (pathname == "/searchIngredient")
+      {
+        router.push(`/searchIngredient/?q=${encodeURIComponent(inputValue)}`);
+      }
+      else
+      {
+        router.push(`/searchmenu/?q=${encodeURIComponent(inputValue)}`);
+      }
+      
+    } else {
+      router.push("/");
+    }
+  };
+
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
   return (
     <>
       <div className="max-w-lg w-full flex items-center border border-[rgb(237,179,07)] rounded-md p-1 bg-white ">
@@ -10,6 +46,9 @@ const SearchBox = () => {
             type="text"
             placeholder="พิมพ์ชื่อวัตถุดิบ..."
             className="w-full pl-10 pr-4 py-1 border-none rounded-md focus:outline-none focus:ring-0"
+            value={inputValue}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
           />
 
           <svg
@@ -26,7 +65,7 @@ const SearchBox = () => {
             />
           </svg>
         </div>
-        <button className="bg-[rgb(237,179,07)] text-[rgb(34,34,34)] rounded-md px-4 py-1 ml-2 font-semibold">
+        <button onClick={handleSearch} className="bg-[rgb(237,179,07)] text-[rgb(34,34,34)] rounded-md px-4 py-1 ml-2 font-semibold">
           ค้นหา
         </button>
       </div>
