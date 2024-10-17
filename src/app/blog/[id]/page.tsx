@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect,useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import {
@@ -12,12 +12,33 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RatingBox from "@/components/RatingBox";
 import Modal from "@mui/material/Modal";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import axios from "axios";
 
 export default function Page() {
-  const params = useParams<{ postId: string }>();
+  const params = useParams<{ id: string }>();
+  const [data, setData] = useState(null);
   const [open, setOpen] = React.useState<boolean>(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleDelete = async () => {
+    alert("Delete post");
+  };
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer 427622c2e0ecc5226bd502ac4ea6a27274f569b33b516a2fba680bdae63f9b34371a915404a4e47e0d357f3d9242ead0c9afe1ae6838fddb62131497ef42467d`, // Add the JWT token to the Authorization header
+      },
+    };
+    axios.get(`http://localhost:5050/blogs/${params.id}`,config)
+      .then((response) => {
+        setData(response.data); 
+        console.log("Blog data:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching the blog data:", error);
+      });
+  }, [params.id]); 
   return (
     <div className="flex flex-row w-3/5 p-10 gap-6 mx-auto b  g-zinc-100">
       <div className="flex flex-col gap-6 w-3/5 ">
@@ -80,7 +101,19 @@ export default function Page() {
           </ul>
         </div>
         <div className="shadow-lg rounded-lg gap-2 p-4">
-          <p className="font-bold  text-xl">วิธีการทำ</p>
+          <p className="font-bold  text-xl mb-2">เครื่องครัว</p>
+          <hr className="border-b-1 border-green-500" />
+          <ul className="list-decimal mt-2 ml-8 flex flex-col gap-2">
+            <li>ไข่ไก่ 20 ฟอง</li>
+            <li>ไข่ไก่ 20 ฟอง</li>
+            <li>ไข่ไก่ 20 ฟอง</li>
+            <li>ไข่ไก่ 20 ฟอง</li>
+            <li>ไข่ไก่ 20 ฟอง</li>
+          </ul>
+        </div>
+        <div className="shadow-lg rounded-lg gap-2 p-4">
+          <p className="font-bold  text-xl mb-2">วิธีการทำ</p>
+          <hr className="border-b-1 border-green-500" />
           <ul className="list-decimal mt-2 ml-8 flex flex-col gap-2">
             <li>ไข่ไก่ 20 ฟอง</li>
             <li>ไข่ไก่ 20 ฟอง</li>
@@ -157,22 +190,7 @@ export default function Page() {
           ลบโพสต์
         </button>
       </div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <div className="flex justify-center items-center w-full h-full">
-          <div className="w-[500px] py-6 bg-white flex flex-col gap-6 rounded-lg border-2 border-black">
-            <p className="text-center text-xl font-bold">ต้องการที่จะลบโพสต์นี้ใช่หรือไม่</p>
-            <div className="flex gap-6 w-full justify-evenly">
-              <button className="px-4 py-1 bg-yellow-300 hover:bg-[#F1C339] font-bold rounded-md">ยืนยัน</button>
-              <button className="px-4 py-1 bg-[#4D4D4E] hover:bg-[#39393a] font-bold rounded-md text-white" onClick={()=>{setOpen(false);}}>ยกเลิก</button>
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <ConfirmationModal title="ต้องการที่จะลบโพสต์ใช่หรือไม่" open={open} setOpen={setOpen} handleSubmit={handleDelete}></ConfirmationModal>
     </div>
   );
 }
