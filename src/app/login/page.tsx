@@ -14,7 +14,7 @@ const Login = () => {
     try {
       const result = await login(formData);
       Cookies.set('token', result.access_token, { expires: 7, path: '/' });
-      Cookies.set('user_id' , result.userId, { expires: 7, path: '/' });
+      Cookies.set('userId' , result.user_id, { expires: 7, path: '/' });
       router.push('/home');
     } catch (error: any) {}
   }
