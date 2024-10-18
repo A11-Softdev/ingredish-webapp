@@ -2,12 +2,14 @@ import { Dispatch, SetStateAction, FC, useState } from "react";
 import Modal from "@mui/material/Modal";
 
 interface ConfirmationModalProps {
+  title: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   handleSubmit: () => Promise<void>;
 }
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
+  title,
   open,
   setOpen,
   handleSubmit,
@@ -42,7 +44,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
           onClick={(e) => e.stopPropagation()} // Prevent modal content clicks from closing
         >
           <p className="text-center text-xl font-bold" id="modal-modal-title">
-            ต้องการที่จะแก้ไขสินค้านี้ใช่หรือไม่
+            {title}
           </p>
           <div className="flex gap-6 w-full justify-evenly">
             <button
