@@ -29,7 +29,7 @@ const FeedHome = () => {
       <div className='bg-white w-4/5 h-full flex flex-col items-center'>
         <div className='my-3'>
           <h1 className='text-3xl font-semibold my-4'>What Should I COOK Today?</h1>
-          <SearchBox />
+          <SearchBox defaultValue=''/>
         </div>
         <div className='w-full px-10 my-3 pb-5 border-b-2 border-yellow-400'>
           <h2 className="text-2xl font-medium my-3">สูตรที่ได้จาก A.I.</h2>
