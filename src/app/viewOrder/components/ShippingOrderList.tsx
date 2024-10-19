@@ -5,28 +5,31 @@ interface Order {
   shopName: string;
   email: string;
   orderLink: string;
+  status: boolean;
 }
 
 const ordersData: Order[] = [
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
-    // Add more orders if needed
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: false },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail', status: true },
+  // Add more orders if needed
 ];
 
 const ShippingOrderList: React.FC = () => {
@@ -77,10 +80,16 @@ const ShippingOrderList: React.FC = () => {
                   View Order
                 </a>
               </td>
-              <td className="py-2 px-4 border">
-                <button className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
-                  Shipping
-                </button>
+              <td className="py-2 px-4 border text-center">
+                {order.status ? (
+                  <button className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+                    Done
+                  </button>
+                ) : (
+                  <button className="bg-yellow-400 text-black py-1 px-3 rounded hover:bg-yellow-500">
+                    In Progress
+                  </button>
+                )}
               </td>
             </tr>
           ))}
