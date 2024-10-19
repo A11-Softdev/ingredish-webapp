@@ -8,40 +8,33 @@ interface Order {
 }
 
 const ordersData: Order[] = [
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
-  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '#' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
+  { dateCreated: '9:30:31 14/08/2024', shopName: 'John Doe', email: 'john@example.com', orderLink: '/orderDetail' },
   // Add more orders if needed
 ];
 
 const RequestOrderList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [actionType, setActionType] = useState<'confirm' | 'cancel' | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
 
   // Calculate the total number of pages needed
   const totalOrders = ordersData.length;
@@ -53,6 +46,26 @@ const RequestOrderList: React.FC = () => {
   const currentOrders = ordersData.slice(indexOfFirstOrder, indexOfLastOrder);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const handleActionClick = (action: 'confirm' | 'cancel', orderIndex: number) => {
+    setActionType(action);
+    setSelectedOrder(orderIndex);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    // Logic for confirming the order
+    console.log(`Order ${selectedOrder} confirmed.`);
+    setIsModalOpen(false);
+    setSelectedOrder(null);
+  };
+
+  const handleCancel = () => {
+    // Logic for canceling the order
+    console.log(`Order ${selectedOrder} canceled.`);
+    setIsModalOpen(false);
+    setSelectedOrder(null);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -88,10 +101,16 @@ const RequestOrderList: React.FC = () => {
                 </a>
               </td>
               <td className="py-2 px-4 border">
-                <button className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+                <button 
+                  onClick={() => handleActionClick('confirm', index)} 
+                  className="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600"
+                >
                   Confirm
                 </button>
-                <button className="bg-red-500 text-white py-1 px-3 ml-2 rounded hover:bg-red-600">
+                <button 
+                  onClick={() => handleActionClick('cancel', index)} 
+                  className="bg-red-500 text-white py-1 px-3 ml-2 rounded hover:bg-red-600"
+                >
                   Cancel
                 </button>
               </td>
@@ -128,6 +147,31 @@ const RequestOrderList: React.FC = () => {
           Next
         </button>
       </div>
+
+      {/* Modal for confirmation */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded shadow-lg">
+            <h2 className="text-lg font-semibold">
+              คุณแน่ใจหรือไม่ว่าต้องการ {actionType === 'confirm' ? 'ยืนยัน' : 'ยกเลิก'} คำสั่งซื้อ?
+            </h2>
+            <div className="mt-4 flex items-center justify-center">
+              <button 
+                onClick={actionType === 'confirm' ? handleConfirm : handleCancel} 
+                className="bg-yellow-400 text-black py-1 px-3 rounded hover:bg-yellow-500 mr-2"
+              >
+                ยืนยัน
+              </button>
+              <button 
+                onClick={() => setIsModalOpen(false)} 
+                className="bg-gray-300 text-black py-1 px-3 rounded hover:bg-gray-400"
+              >
+                ยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
