@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import AvatarIcon from "./AvatarIcon";
@@ -12,16 +12,35 @@ const NavBar = () => {
   const query = searchParams.get('q') || '';
   const [isToken, setIsToken] = useState<boolean>(false);
 
+  const checkToken = () => {
+    const token = Cookies.get("token");
+    setIsToken(!!token);
+  };
+
   const handleLogout = () => {
     Cookies.remove("token");
-    setIsToken(false);
+    checkToken();
   };
 
   useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      setIsToken(true);
-    }
+    checkToken();
+  }, []);
+
+  useEffect(() => {
+    const handleCookieChange = (event: Event) => {
+      if (event instanceof StorageEvent && event.key === null) {
+        checkToken();
+      }
+    };
+
+    window.addEventListener('storage', handleCookieChange);
+
+    const intervalId = setInterval(checkToken, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleCookieChange);
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
@@ -76,7 +95,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Cart</p>
             </Link>
-            <AvatarIcon onLogout={handleLogout} /> {/* Pass the handleLogout function */}
+            <AvatarIcon onLogout={handleLogout} />
           </div>
         </>
       ) : (
