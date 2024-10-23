@@ -55,7 +55,7 @@ const NavBar = () => {
             <SearchBox defaultValue={query}/>
           </div>
           <div className="max-w-md w-full flex justify-between items-center mr-5">
-            <Link href="/" className="flex flex-col">
+            <Link href="/generateAIRecipe" className="flex flex-col">
               <img
                 src="/tabler_file-text-ai.png"
                 alt="Menu Icon"
