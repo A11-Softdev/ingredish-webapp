@@ -160,6 +160,9 @@ const Page: React.FC = () => {
 
             {/* Kitchen Tools Checkboxes */}
             <div className="flex flex-col gap-4">
+            <label htmlFor="optional_dish" className="text-xl font-semibold">
+                เคริ่องครัว
+              </label>
               <div>
                 <input
                   type="checkbox"
