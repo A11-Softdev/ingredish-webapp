@@ -63,7 +63,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Menu</p>
             </Link>
-            <Link href="/" className="flex flex-col">
+            <Link href="/feedHome" className="flex flex-col">
               <img
                 src="/basil_home-outline.png"
                 alt="Home Icon"
