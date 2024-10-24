@@ -87,7 +87,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Shop</p>
             </Link>
-            <Link href="/" className="flex flex-col">
+            <Link href="/cart" className="flex flex-col">
               <img
                 src="/basil_shopping-basket-outline.png"
                 alt="Cart Icon"
