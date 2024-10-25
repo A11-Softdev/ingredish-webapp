@@ -1,4 +1,4 @@
-import { LayoutProps } from "../../.next/types/app/layout";
+import { LayoutProps } from "../../.next/types/app/page";
 
 const Layout = ({children} : LayoutProps) => {
     return (

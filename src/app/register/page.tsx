@@ -1,69 +1,29 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
+import RegisterForm from './components/RegisterForm';
+import { registerUser } from './api/registerUser';
+import { RegisterFormData } from './types/RegisterTypes';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
-const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+const RegisterPage = () => {
+  const router = useRouter();
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleRegister = async (formData: RegisterFormData) => {
+    try {
+      const result = await registerUser(formData);
+      Cookies.set('token', result.access_token, { expires: 7, path: '/' });
+      console.log('Registration successful:', result);
+      router.push('/home');
+    } catch (error: any) {
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white text-black text-center">
-      <form
-        onSubmit={handleSubmit}
-        className='space-y-6'
-      >
-        <h1 className='font-bold text-2xl'>Sign Up</h1>
-        <p className='font-light'>Be a part of the creativity in food</p>
-        <div>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            placeholder='Username'
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className="w-full p-3 rounded-xl shadow-sm bg-gray-300"
-          />
-        </div>
-        <div>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            placeholder='Email'
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full p-3 rounded-xl shadow-sm bg-gray-300"
-          />
-        </div>
-        <div className="mb-6">
-          <input
-            type="password"
-            id="password"
-            value={password}
-            placeholder='Password'
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full p-3 rounded-xl shadow-sm bg-gray-300"
-          />
-        </div>
-        <p>or</p>
-        <button
-          type="submit"
-          className="w-full bg-dark-yellow p-2 rounded-xl"
-        >
-          Sign Up
-        </button>
-      </form>
+      <RegisterForm onSubmit={handleRegister} />
     </div>
   );
 };
 
-export default Signup;
+export default RegisterPage;
