@@ -11,12 +11,11 @@ export interface LongCardDataProps {
     review:string[];
     createdAt:Date;
     rating:number;
-    isGenByAI?:boolean;
+    IsGenerated?:boolean;
     source:string;
 }
 
 export interface BlogsProps{
-
   data: LongCardDataProps[];
   total:number;
   page:number;
