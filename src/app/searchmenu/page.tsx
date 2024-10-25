@@ -122,7 +122,7 @@ const SearchMenu = () => {
         setSortOption={setSortOption}
       />
       <div className="mt-2 mb-2 w-full border border-black"></div>
-      <div className="h-[650px]">
+      <div className="min-h-svh">
         <div className="grid grid-cols-2 gap-2">
           {filteredItems?.slice(0, 10).map((blog) => (
             <LongCard card={blog} onDelete={deleteBlog} />
