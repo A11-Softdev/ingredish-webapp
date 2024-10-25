@@ -71,7 +71,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Home</p>
             </Link>
-            <Link href="/" className="flex flex-col">
+            <Link href="/createBlog" className="flex flex-col">
               <img
                 src="/basil_file-outline.png"
                 alt="Post Icon"
