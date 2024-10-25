@@ -22,7 +22,6 @@ const RegisterPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white text-black text-center">
       <RegisterForm onSubmit={handleRegister} />
-
     </div>
   );
 };

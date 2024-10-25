@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import AvatarIcon from "./AvatarIcon";
@@ -12,16 +12,35 @@ const NavBar = () => {
   const query = searchParams.get('q') || '';
   const [isToken, setIsToken] = useState<boolean>(false);
 
+  const checkToken = () => {
+    const token = Cookies.get("token");
+    setIsToken(!!token);
+  };
+
   const handleLogout = () => {
     Cookies.remove("token");
-    setIsToken(false);
+    checkToken();
   };
 
   useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      setIsToken(true);
-    }
+    checkToken();
+  }, []);
+
+  useEffect(() => {
+    const handleCookieChange = (event: Event) => {
+      if (event instanceof StorageEvent && event.key === null) {
+        checkToken();
+      }
+    };
+
+    window.addEventListener('storage', handleCookieChange);
+
+    const intervalId = setInterval(checkToken, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleCookieChange);
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
@@ -36,7 +55,7 @@ const NavBar = () => {
             <SearchBox defaultValue={query}/>
           </div>
           <div className="max-w-md w-full flex justify-between items-center mr-5">
-            <Link href="/" className="flex flex-col">
+            <Link href="/generateAIRecipe" className="flex flex-col">
               <img
                 src="/tabler_file-text-ai.png"
                 alt="Menu Icon"
@@ -44,7 +63,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Menu</p>
             </Link>
-            <Link href="/" className="flex flex-col">
+            <Link href="/feedHome" className="flex flex-col">
               <img
                 src="/basil_home-outline.png"
                 alt="Home Icon"
@@ -68,7 +87,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Shop</p>
             </Link>
-            <Link href="/" className="flex flex-col">
+            <Link href="/cart" className="flex flex-col">
               <img
                 src="/basil_shopping-basket-outline.png"
                 alt="Cart Icon"
@@ -76,7 +95,7 @@ const NavBar = () => {
               />
               <p className="font-sans text-base font-bold text-white">Cart</p>
             </Link>
-            <AvatarIcon onLogout={handleLogout} /> {/* Pass the handleLogout function */}
+            <AvatarIcon onLogout={handleLogout} />
           </div>
         </>
       ) : (
