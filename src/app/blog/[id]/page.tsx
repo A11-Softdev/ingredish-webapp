@@ -18,8 +18,9 @@ import Cookies from "js-cookie";
 
 interface Recipe {
   IsGenerated: boolean;
+  description: string;
   _id: string;
-  user_id: string;
+  user_id: any;
   name: string;
   Role: string;
   image_url: string;
@@ -40,7 +41,6 @@ export default function Page() {
   
   const handleDelete = async () => {
     alert("Delete post");
-    // Delete the blog post using axios.
     axios
       .delete(`http://localhost:5050/blogs/${params.id}`)
       .then((response) => {})
@@ -84,6 +84,7 @@ export default function Page() {
       .catch((error) => {
         console.error("Error fetching the blog data:", error);
       });
+
   }, [params.id]);
   return (
     <div className="flex flex-row w-3/5 p-10 gap-6 mx-auto b  g-zinc-100">
@@ -102,22 +103,22 @@ export default function Page() {
         <div className="shadow-lg text-2xl font-bold rounded-lg p-4">
           {data?.name}
         </div>
-        <div className="shadow-lg  rounded-lg p-4">
+        <div className="shadow-lg rounded-lg p-4">
           <div className="flex flex-row items-center gap-2">
-            <div>
+            <a href={`/profile/${data?.user_id._id}`}>
               <img
-                src="/profile.webp"
+                src={data?.user_id.image_url}
                 alt="profile image"
                 width={50}
                 className="rounded-3xl"
               />
-            </div>
+            </a>
             <div className="flex flex-col ">
-              <p className="text-2xl font-bold">ณัฐริกา เจ็กสูงเนิน</p>
+              <a href={`/profile/${data?.user_id._id}`} className="text-2xl font-bold">{data?.user_id.username}</a>
               <p className="text-gray-500">โพสต์เมื่อ {data?.createdAt}</p>
             </div>
           </div>
-          <p className="mt-2">ข้าวไข่ข้นปูนุ่มๆ ละมุนลิ้นกลิ่นผลไม้</p>
+          <p className="mt-2">{data?.description}</p>
         </div>
         <div className="flex flex-col gap-2 p-4 shadow-lg rounded-lg">
           <p className="font-bold  text-xl">ส่วนผสม</p>{" "}
