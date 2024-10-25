@@ -95,7 +95,7 @@ const Page: React.FC = () => {
           ingredients: formValues.ingredients,
           supplies: formValues.supplies,
         };
-
+        console.log("Submission data:", submissionData);
         const response = await axios.post(
           `http://localhost:5050/generate-recipe/`,
           submissionData

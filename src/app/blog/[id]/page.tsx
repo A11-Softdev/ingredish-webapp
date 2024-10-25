@@ -14,14 +14,17 @@ import RatingBox from "@/components/RatingBox";
 import Modal from "@mui/material/Modal";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface Recipe {
   IsGenerated: boolean;
+  description: string;
   _id: string;
-  user_id: string;
+  user_id: any;
   name: string;
   Role: string;
   image_url: string;
+  time:string;
   serve: number;
   ingredient: string[];
   kitchentools: string[];
@@ -35,10 +38,9 @@ export default function Page() {
   const [data, setData] = useState<Recipe>();
   const [open, setOpen] = React.useState<boolean>(false);
   const router = useRouter();
-
+  
   const handleDelete = async () => {
     alert("Delete post");
-    // Delete the blog post using axios.
     axios
       .delete(`http://localhost:5050/blogs/${params.id}`)
       .then((response) => {})
@@ -51,9 +53,10 @@ export default function Page() {
   };
 
   useEffect(() => {
+    const token = Cookies.get("token");
     const config = {
       headers: {
-        Authorization: `Bearer 427622c2e0ecc5226bd502ac4ea6a27274f569b33b516a2fba680bdae63f9b34371a915404a4e47e0d357f3d9242ead0c9afe1ae6838fddb62131497ef42467d`, // Add the JWT token to the Authorization header
+        Authorization: `Bearer ${token}`, 
       },
     };
 
@@ -81,6 +84,7 @@ export default function Page() {
       .catch((error) => {
         console.error("Error fetching the blog data:", error);
       });
+
   }, [params.id]);
   return (
     <div className="flex flex-row w-3/5 p-10 gap-6 mx-auto b  g-zinc-100">
@@ -99,22 +103,22 @@ export default function Page() {
         <div className="shadow-lg text-2xl font-bold rounded-lg p-4">
           {data?.name}
         </div>
-        <div className="shadow-lg  rounded-lg p-4">
+        <div className="shadow-lg rounded-lg p-4">
           <div className="flex flex-row items-center gap-2">
-            <div>
+            <a href={`/profile/${data?.user_id._id}`}>
               <img
-                src="/profile.webp"
+                src={data?.user_id.image_url}
                 alt="profile image"
                 width={50}
                 className="rounded-3xl"
               />
-            </div>
+            </a>
             <div className="flex flex-col ">
-              <p className="text-2xl font-bold">ณัฐริกา เจ็กสูงเนิน</p>
+              <a href={`/profile/${data?.user_id._id}`} className="text-2xl font-bold">{data?.user_id.username}</a>
               <p className="text-gray-500">โพสต์เมื่อ {data?.createdAt}</p>
             </div>
           </div>
-          <p className="mt-2">ข้าวไข่ข้นปูนุ่มๆ ละมุนลิ้นกลิ่นผลไม้</p>
+          <p className="mt-2">{data?.description}</p>
         </div>
         <div className="flex flex-col gap-2 p-4 shadow-lg rounded-lg">
           <p className="font-bold  text-xl">ส่วนผสม</p>{" "}
@@ -126,7 +130,7 @@ export default function Page() {
                 width={30}
                 className="text-[#F1C339]"
               />
-              {data?.serve} นาที
+              {data?.time} ชม.
             </div>
             <div>
               <FontAwesomeIcon
