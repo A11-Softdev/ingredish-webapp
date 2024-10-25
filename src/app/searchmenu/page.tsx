@@ -7,12 +7,14 @@ import { LongCardDataProps, BlogsProps } from "./types/LongCardTypes";
 import { fetchBlogs } from "./api/blogs";
 
 import LongCard from "./components/LongCard";
+import Pagination from "@/components/Pagination";
 
 const SearchMenu = () => {
   const [blogs, setBlogs] = useState<LongCardDataProps[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [numPage, setNumpage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
@@ -20,6 +22,11 @@ const SearchMenu = () => {
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [selectedSource, setSelectedSource] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState<string>("latest");
+
+  const deleteBlog = (id : string) => {
+    setBlogs((prevCards) => prevCards?.filter((card) => card._id !== id));
+  };
+
   //get Data
   useEffect(() => {
     const getBlogs = async () => {
@@ -47,6 +54,12 @@ const SearchMenu = () => {
 
     getBlogs();
   }, []);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // You can add logic here to fetch new data based on `page`
+    console.log("Page changed to:", page);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -94,52 +107,25 @@ const SearchMenu = () => {
           </div>
         </>
       )}
-      <ul>
-        <FilterBar
-          selectedTools={selectedTools}
-          setSelectedTools={setSelectedTools}
-          selectedSource={selectedSource}
-          setSelectedSource={setSelectedSource}
-          sortOption={sortOption}
-          setSortOption={setSortOption}
-        />
-        <div className="mt-2 mb-2 w-full border border-black"></div>
-        <div className="grid grid-cols-2 gap-2">
-          {filteredItems?.slice(0, 10).map((blog) => (
-            <LongCard
-              _id={blog._id}
-              user_id={blog.user_id}
-              name={blog.name}
-              role={blog.role}
-              image_url={blog.image_url}
-              serve={blog.serve}
-              ingredient={blog.ingredient}
-              kitchentools={blog.kitchentools}
-              recipe={blog.recipe}
-              review={blog.review}
-              createdAt={blog.createdAt}
-              rating={blog.rating}
-              isGenByAI={blog.isGenByAI}
-              source={blog.source}
-            />
-
-            // <li key={blog._id}>
-            //   <h2>{blog.name}</h2>
-            //   <p>{blog.user_id}</p>
-            //   <p>{blog.role}</p>
-            //   <p>{blog.image_url}</p>
-            //   <p>{blog.serve}</p>
-            //   <p>{blog.ingredient}</p>
-            //   <p>{blog.kitchentools}</p>
-            //   <p>{blog.recipe}</p>
-            //   <p>{blog.review}</p>
-            //   <p>{blog.rating}</p>
-            //   <p>{blog.isGenByAI}</p>
-            //   <small>{new Date(blog.createdAt).toLocaleDateString()}</small>
-            // </li>
-          ))}
-        </div>
-      </ul>
+      <FilterBar
+        selectedTools={selectedTools}
+        setSelectedTools={setSelectedTools}
+        selectedSource={selectedSource}
+        setSelectedSource={setSelectedSource}
+        sortOption={sortOption}
+        setSortOption={setSortOption}
+      />
+      <div className="mt-2 mb-2 w-full border border-black"></div>
+      <div className="grid grid-cols-2 gap-2">
+        {filteredItems?.slice(0, 10).map((blog) => (
+          <LongCard card={blog} onDelete={deleteBlog}/>
+        ))}
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={numPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

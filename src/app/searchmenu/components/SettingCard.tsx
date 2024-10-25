@@ -11,8 +11,14 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { deleteBlog } from "../api/deleteBlogs";
+interface settingProps{
+  username : string;
+  blog_id : string;
+  onDelete: (id: string) => void;
+}
 
-const SettingCard = ({ username }: { username: string }) => {
+const SettingCard = ({ username, blog_id, onDelete }: settingProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [bannedModal, setBannedModal] = useState<number>(0);
   const [deleteModal, setDeleteModal] = useState<number>(0);
@@ -33,10 +39,13 @@ const SettingCard = ({ username }: { username: string }) => {
     onClose();
     setBannedModal(0); // Reset to the first modal when closing
     setDeleteModal(0);
+
   };
 
   // Handle submit button in the first modal
-  const handleDeleteSubmit = () => {
+  const handleDeleteSubmit = async () => {
+    await deleteBlog(blog_id);
+    onDelete(blog_id);
     setDeleteModal(1); // Switch to the second modal
   };
 
@@ -53,6 +62,7 @@ const SettingCard = ({ username }: { username: string }) => {
       !(event.target instanceof HTMLInputElement) // Exclude clicks on input elements
     ) {
       setIsClick(false); // Close or set state as needed
+
     }
   };
   const handleClick = () => {
@@ -111,7 +121,7 @@ const SettingCard = ({ username }: { username: string }) => {
       </button>
 
       {isClick &&
-        (username === currentUser ? (
+        (true ? (
           <div
             ref={elementRef}
             className="min-w-32 absolute right-0 z-50 bg-white border-2 border-black rounded-md"
