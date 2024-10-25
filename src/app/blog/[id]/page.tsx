@@ -14,6 +14,7 @@ import RatingBox from "@/components/RatingBox";
 import Modal from "@mui/material/Modal";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface Recipe {
   IsGenerated: boolean;
@@ -22,6 +23,7 @@ interface Recipe {
   name: string;
   Role: string;
   image_url: string;
+  time:string;
   serve: number;
   ingredient: string[];
   kitchentools: string[];
@@ -35,7 +37,7 @@ export default function Page() {
   const [data, setData] = useState<Recipe>();
   const [open, setOpen] = React.useState<boolean>(false);
   const router = useRouter();
-
+  
   const handleDelete = async () => {
     alert("Delete post");
     // Delete the blog post using axios.
@@ -51,9 +53,10 @@ export default function Page() {
   };
 
   useEffect(() => {
+    const token = Cookies.get("token");
     const config = {
       headers: {
-        Authorization: `Bearer 427622c2e0ecc5226bd502ac4ea6a27274f569b33b516a2fba680bdae63f9b34371a915404a4e47e0d357f3d9242ead0c9afe1ae6838fddb62131497ef42467d`, // Add the JWT token to the Authorization header
+        Authorization: `Bearer ${token}`, 
       },
     };
 
@@ -126,7 +129,7 @@ export default function Page() {
                 width={30}
                 className="text-[#F1C339]"
               />
-              {data?.serve} นาที
+              {data?.time} ชม.
             </div>
             <div>
               <FontAwesomeIcon
