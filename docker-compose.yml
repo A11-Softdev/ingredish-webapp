@@ -3,7 +3,6 @@ services:
     image: ingredish
     build:
       context: ./
-      target: dev
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
