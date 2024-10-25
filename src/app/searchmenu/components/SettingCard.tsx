@@ -13,18 +13,18 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import { deleteBlog } from "../api/deleteBlogs";
 interface settingProps{
-  username : string;
+  user_id : string;
   blog_id : string;
   onDelete: (id: string) => void;
 }
 
-const SettingCard = ({ username, blog_id, onDelete }: settingProps) => {
+const SettingCard = ({ user_id, blog_id, onDelete }: settingProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [bannedModal, setBannedModal] = useState<number>(0);
   const [deleteModal, setDeleteModal] = useState<number>(0);
   const [isClick, setIsClick] = useState<boolean>(false);
   const elementRef = useRef<HTMLDivElement>(null);
-  const currentUser = Cookies.get("username");
+  const currentUserID = Cookies.get("userId");
 
   // State to manage the input value
   const [inputValue, setInputValue] = useState("");
@@ -121,7 +121,7 @@ const SettingCard = ({ username, blog_id, onDelete }: settingProps) => {
       </button>
 
       {isClick &&
-        (true ? (
+        (currentUserID == user_id ? (
           <div
             ref={elementRef}
             className="min-w-32 absolute right-0 z-50 bg-white border-2 border-black rounded-md"

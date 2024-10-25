@@ -8,7 +8,7 @@ import Link from "next/link";
 
 type CardProps = {
   card: LongCardDataProps;
-  onDelete: (id:string) => void;
+  onDelete: (id: string) => void;
 };
 
 const LongCard = ({ card, onDelete }: CardProps) => {
@@ -35,9 +35,9 @@ const LongCard = ({ card, onDelete }: CardProps) => {
   return (
     <div className="bg-white w-full h-full min-h-28 grid grid-cols-5 border z-0">
       <div className="grid col-span-4 z-0 ml-3 mt-3 ">
-        <Link href={`/home`} key={card._id} className="flex -z-10">
+        <Link href={`/blog/${card._id}`} key={card._id} className="flex -z-10">
           <div className="text-lg font-semibold">{card.name}</div>
-          {card.isGenByAI && (
+          {card.IsGenerated && (
             <img
               src="/hugeicons_ai-chat-02.png"
               alt="Menu"
@@ -143,7 +143,7 @@ const LongCard = ({ card, onDelete }: CardProps) => {
         <div className="flex justify-between">
           <div className=" flex gap-2 items-center">
             {username}
-            {card.isGenByAI && (
+            {card.IsGenerated && (
               <div className="text-[rgb(66,110,134)] text-xs font-semibold">
                 หมายเหตุสูตรนี้มี Ref จาก A.I.
               </div>
@@ -156,7 +156,11 @@ const LongCard = ({ card, onDelete }: CardProps) => {
 
       <div className="relative z-50">
         <div className="absolute right-0 m-2">
-          <SettingCard username={username} blog_id={card._id} onDelete={onDelete}/>
+          <SettingCard
+            user_id={card.user_id}
+            blog_id={card._id}
+            onDelete={onDelete}
+          />
         </div>
         {card.image_url == null ? (
           <img

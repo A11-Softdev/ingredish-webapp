@@ -23,42 +23,48 @@ const SearchMenu = () => {
   const [selectedSource, setSelectedSource] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState<string>("latest");
 
-  const deleteBlog = (id : string) => {
+  const deleteBlog = (id: string) => {
     setBlogs((prevCards) => prevCards?.filter((card) => card._id !== id));
   };
 
   //get Data
-  useEffect(() => {
-    const getBlogs = async () => {
-      try {
-        setLoading(true);
-        const temp = await fetchBlogs();
-        console.log("Fetched data:", temp);
+  const getBlogs = async (query: string, page: number) => {
+    try {
+      setLoading(true);
+      const temp = await fetchBlogs(page, 10, query);
+      console.log("Fetched data:", temp);
 
-        setBlogs(temp.data);
-        setNumpage(temp.page);
+      setBlogs(temp.data);
 
-        // Check if the data is indeed an array
-        if (Array.isArray(temp.data)) {
-          setBlogs(temp.data); // Set blogs only if data is an array
-        } else {
-          throw new Error("Invalid data format received. Expected an array.");
-        }
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-        setError("Failed to load blogs.");
-      } finally {
-        setLoading(false);
+      let numberOfPages: number = Math.ceil(temp.total / temp.limit);
+      const isNotZero: number = temp.total % temp.limit; // Calculate the modulus
+
+      // if (isNotZero > 0) {
+      //   numberOfPages++;
+      // }
+      // console.log(numberOfPages);
+
+      setNumpage(numberOfPages);
+
+      // Check if the data is indeed an array
+      if (Array.isArray(temp.data)) {
+        setBlogs(temp.data); // Set blogs only if data is an array
+      } else {
+        throw new Error("Invalid data format received. Expected an array.");
       }
-    };
-
-    getBlogs();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+      setError("Failed to load blogs.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getBlogs(query, currentPage);
+  }, [query, currentPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // You can add logic here to fetch new data based on `page`
-    console.log("Page changed to:", page);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -66,20 +72,20 @@ const SearchMenu = () => {
 
   // Handle filtering and sorting
   const filteredItems = blogs
-    ?.filter(
-      (item) =>
-        (selectedTools.length === 0 ||
-          item.kitchentools.some((tool) => selectedTools.includes(tool))) &&
-        (selectedSource.length === 0 ||
-          selectedSource.includes(
-            item.isGenByAI === true ? "AI" : "ผู้ใช้งาน"
-          )) &&
-        (item.name.toLowerCase().includes(query?.toLowerCase()) ||
-          item.ingredient.some((ingre) =>
-            ingre.toLowerCase().includes(query?.toLowerCase() || "")
-          ))
-    )
+    ?.filter((item) => {
+      // Filter by selected kitchen tools
+      const matchesTools =
+        selectedTools.length === 0 ||
+        item.kitchentools?.some((tool) => selectedTools.includes(tool));
+
+      // Filter by source (AI-generated or user-generated)
+      const matchesSource =
+        selectedSource.length === 0 ||
+        selectedSource.includes(item.IsGenerated ? "AI" : "ผู้ใช้งาน");
+      return matchesTools && matchesSource;
+    })
     .sort((a, b) => {
+      // Sorting logic based on selected sort option
       if (sortOption === "latest") {
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -89,7 +95,7 @@ const SearchMenu = () => {
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         );
       } else if (sortOption === "highestRating") {
-        return b.rating - a.rating;
+        return (b.rating || 0) - (a.rating || 0);
       } else if (sortOption === "menuAsc") {
         return a.name.localeCompare(b.name);
       } else if (sortOption === "menuDesc") {
@@ -99,7 +105,7 @@ const SearchMenu = () => {
     });
 
   return (
-    <div className="ml-28 mr-28 min-h-svh">
+    <div className="ml-28 mr-28">
       {query && (
         <>
           <div className="text-3xl font-semibold text-center mt-10">
@@ -116,16 +122,20 @@ const SearchMenu = () => {
         setSortOption={setSortOption}
       />
       <div className="mt-2 mb-2 w-full border border-black"></div>
-      <div className="grid grid-cols-2 gap-2">
-        {filteredItems?.slice(0, 10).map((blog) => (
-          <LongCard card={blog} onDelete={deleteBlog}/>
-        ))}
+      <div className="h-[650px]">
+        <div className="grid grid-cols-2 gap-2">
+          {filteredItems?.slice(0, 10).map((blog) => (
+            <LongCard card={blog} onDelete={deleteBlog} />
+          ))}
+        </div>
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={numPage}
-        onPageChange={handlePageChange}
-      />
+      <div className="mt-10 mb-10">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={numPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
