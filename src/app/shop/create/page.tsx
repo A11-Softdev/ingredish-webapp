@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Phone, Plus, X, Upload } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { createShop } from '../api/shop';
+import { shopApi } from '../api/shop';
 import { uploadShopImage } from '@/utils/uploadImage';
 import { compressImage } from '@/utils/uploadImage';
 
@@ -119,14 +119,13 @@ export default function ShopCreationForm() {
                 setIsUploading(false);
             }
 
-            // Prepare shop data
             const shopData = {
                 ...formData,
                 image_url: imageUrl || formData.image_url,
                 contact: formData.contact.filter(c => c.trim()),
             };
 
-            await createShop(shopData);
+            await shopApi.createShop(shopData);
 
             toast.success('Shop created successfully!');
             router.push('/feedHome');
