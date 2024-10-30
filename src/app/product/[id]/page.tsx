@@ -1,33 +1,86 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShopCard from '@/components/ShopCard';
+import axios from 'axios';
+import Cookies from "js-cookie";
+import { config } from 'process';
 
 export default function Page({ params }: { params: { id: string } }) {
-    const id = params.id;
-    const [quantity, setQuantity] = useState(20);
-    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  
-    const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setQuantity(Number(e.target.value));
-    };
-  
-    const handleAddToCart = () => {
-      setIsModalOpen(true); // Show the modal when button is clicked
-    };
-  
-    const closeModal = () => {
-      setIsModalOpen(false); // Close the modal
+  const id = params.id;
+  const [data, setData] = useState<any>();
+  const [quantity, setQuantity] = useState(20);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shop, setShop] = useState<any>();
+  const [products, setProducts] = useState<any[]>([]);
+  const [transformedShop, setTransformedShop] = useState<any>();
+
+  const token = Cookies.get("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
 
-  const shop = {
-    id: "1234",
-    name: "Shikanoko",
-    owner: "Takanoko",
-    description: "Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko",
-    contact: ["Contact"],
-    address:
-      "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345",
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5050/products/${id}`, config)
+      .then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+      });
+  }, [id]); // Adding dependency array to prevent multiple requests
+
+  useEffect(() => {
+    if (data?.shopId?._id) {
+      axios
+        .get(`http://localhost:5050/shops/${data.shopId._id}`)
+        .then((response) => {
+          setShop(response.data);
+          setProducts(response.data.product || []);
+          setTransformedShop({
+            id: response.data._id,
+            name: response.data.name,
+            owner: response.data.user.username,
+            contact: response.data.contact,
+            address: response.data.address,
+            image_url: response.data.image_url
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching shop data:", error);
+          alert("Error fetching shop data");
+        });
+    }
+  }, [data?.shopId?._id]); // Only call this effect if shopId is available
+
+  console.log(shop)
+
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(Number(e.target.value));
+  };
+
+  const handleAddToCart = (productId: string, amount: number) => {
+    // Function to handle adding to cart
+    axios
+      .patch(`http://localhost:5050/carts/my-cart/setProduct`, {
+        productId,
+        amount,
+      }, config)
+      .then((response) => {
+        console.log("Product added to cart:", response.data);
+        setIsModalOpen(true); // Show the modal when the product is successfully added
+      })
+      .catch((error) => {
+        console.error("Error adding product to cart:", error);
+      });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
   };
 
   return (
@@ -35,18 +88,24 @@ export default function Page({ params }: { params: { id: string } }) {
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-5xl w-full">
         {/* Shop Card Section */}
         <div className="mb-6 flex">
-            <ShopCard shop={shop} manage={false} />
+          {transformedShop && <ShopCard shop={transformedShop} manage={false} />}
         </div>
 
         {/* Product Section */}
         <div className="flex justify-between">
           {/* Image Section */}
           <div className="w-1/3 flex justify-center mb-6">
-            <img
-              src="https://images.healthshots.com/healthshots/en/uploads/2024/01/25225611/tomatoes-1.jpg" // Replace with the actual image URL
-              alt="มะเขือเทศ"
-              className="w-48 h-48 rounded-md object-cover"
-            />
+            {data?.image_url ? (
+              <img
+                src={data.image_url}
+                alt="Product Image"
+                className="w-48 h-48 rounded-md object-cover"
+              />
+            ) : (
+              <div className="w-48 h-48 rounded-md bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500">No Image Available</span>
+              </div>
+            )}
           </div>
 
           {/* Product Information */}
@@ -54,14 +113,14 @@ export default function Page({ params }: { params: { id: string } }) {
             {/* Product Name */}
             <div className="grid grid-cols-2 gap-4">
               <label className="text-gray-700 font-semibold text-lg">ชื่อสินค้า</label>
-              <p className="text-gray-700 font-medium text-lg">มะเขือเทศ</p>
+              <p className="text-gray-700 font-medium text-lg">{data?.name}</p>
             </div>
 
             {/* Product Description */}
             <div className="grid grid-cols-2 gap-4">
               <label className="text-gray-700 font-semibold text-lg">รายละเอียดสินค้า</label>
               <p className="text-gray-500">
-                ร้านขายของสด พืชผัก ผลไม้ ตามฤดูกาล, ขายเนื้อหมู เนื้อวัว, ขายอาหารทะเลสด ฯลฯ
+                {data?.description}
               </p>
             </div>
 
@@ -69,24 +128,12 @@ export default function Page({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-700 font-semibold text-lg">จำนวนที่มีอยู่</label>
-                <p className="text-gray-700">100</p>
+                <p className="text-gray-700">{data?.amount}</p>
               </div>
               <div>
                 <label className="block text-gray-700 font-semibold text-lg">ราคาขาย/หน่วย</label>
-                <p className="text-gray-700">20</p>
+                <p className="text-gray-700">{data?.price}</p>
               </div>
-            </div>
-
-            {/* Unit of Sale */}
-            <div className="grid grid-cols-2 gap-4">
-              <label className="text-gray-700 font-semibold text-lg">หน่วยการขาย</label>
-              <p className="text-gray-700">หน่วย</p>
-            </div>
-
-            {/* Explanation */}
-            <div className="grid grid-cols-2 gap-4">
-              <label className="text-gray-700 font-semibold text-lg">คำอธิบาย</label>
-              <p className="text-gray-700">1 หน่วยจะได้มะเขือเทศ 5-6 ลูก</p>
             </div>
 
             {/* Quantity Input */}
@@ -103,7 +150,7 @@ export default function Page({ params }: { params: { id: string } }) {
             {/* Buttons */}
             <div className="flex justify-between items-center mt-6">
               <button
-                onClick={handleAddToCart} // Handle the add-to-cart click
+                onClick={() => handleAddToCart(data?._id, quantity)} 
                 className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md"
               >
                 เพิ่มไปยังตะกร้า
@@ -146,4 +193,4 @@ export default function Page({ params }: { params: { id: string } }) {
       )}
     </div>
   );
-};
+}
