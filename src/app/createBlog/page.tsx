@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import InputFileUpload from './components/InputFileUpload';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,8 +11,12 @@ import { createBlogApi } from '@/app/createBlog/api/createBlog';
 import { uploadBlogImage } from '@/utils/uploadImage';
 import { compressImage } from '@/utils/uploadImage';
 import { toast } from 'react-hot-toast';
+import { Upload } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const CreateBlog = () => {
+  const router = useRouter();
   const [ingredient, setIngredients] = useState(['']);
   const [steps, setSteps] = useState(['']);
   const [kitchenWare, setKitchenWare] = useState(['']);
@@ -31,15 +34,6 @@ const CreateBlog = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [imageFile, setImageFile] = useState<File | null>(null);
-
-  const [formData, setFormData] = useState({
-    name: '',
-    image_url: '',
-    contact: [''],
-    address: '',
-    phone: '',
-    product: [] as string[]
-});
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -81,35 +75,41 @@ const CreateBlog = () => {
   };
 
   const handleSubmit = async () => {
-    const blogData = {
-      image_url,
-      name,
-      description,
-      serve,
-      time,
-      ingredient,
-      kitchentools: kitchenWare,
-      recipe: steps,
-      IsGenerated,
-    };
 
     try {
-      let imageUrl = '';
+      let image_url = '';
       if (imageFile) {
         setIsUploading(true);
-        imageUrl = await uploadBlogImage(imageFile, (progress) => {
+        image_url = await uploadBlogImage(imageFile, (progress) => {
           setUploadProgress(progress);
         });
         setIsUploading(false);
       }
+      const blogData = {
+        image_url,
+        name,
+        description,
+        serve,
+        time,
+        ingredient,
+        kitchentools: kitchenWare,
+        recipe: steps,
+        IsGenerated,
+      };
 
       const response = await createBlogApi.createBlog(blogData);
       setSuccess("Blog created successfully!");
       setError(null); // Clear any previous errors
-    } catch (error: any) {
+    } 
+    catch (error: any) {
       setError(error.message || "Failed to create blog.");
       setSuccess(null); // Clear any previous success message
+    } finally {
+      setIsLoading(false);
+      setIsUploading(false);
+      setUploadProgress(0);
     }
+    router.push('/feedHome');
   };
 
   return (
@@ -118,8 +118,45 @@ const CreateBlog = () => {
         <h1 className='text-4xl font-semibold m-6 text-center'>Share The Recipe<br />You Discovered!</h1>
 
         {/* Upload Image */}
-        <div className='bg-slate-600 flex justify-center items-center w-60 h-60 p-5 m-6 rounded-xl'>
-          <InputFileUpload />
+        <div className="flex justify-center">
+          <div className="relative w-64 h-64">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full h-full rounded-2xl overflow-hidden bg-[#80AA50] hover:bg-[#6d9343] transition-colors duration-200 flex flex-col items-center justify-center relative"
+              disabled={isUploading}
+            >
+              {imagePreview ? (
+                <>
+                  <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    fill
+                    className="object-cover"
+                  />
+                  {isUploading && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
+                      <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                      <p className="text-white mt-2">{Math.round(uploadProgress)}%</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-white flex flex-col items-center">
+                  <Upload className="h-12 w-12" />
+                  <span className="mt-2">Upload Image</span>
+                </div>
+              )}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageChange}
+              disabled={isUploading}
+            />
+          </div>
         </div>
 
         {/* Title Input */}
@@ -227,8 +264,15 @@ const CreateBlog = () => {
 
         {/* Submit and Delete Buttons */}
         <div className='w-80 flex justify-center my-8'>
-          <Button variant="contained" endIcon={<CreateIcon />} onClick={handleSubmit} className='bg-green-600'>
-            Create
+          <Button variant="contained" endIcon={<CreateIcon />} onClick={handleSubmit} className='bg-green-600' >
+            {isLoading ? (
+              <>
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                Creating...
+              </>
+            ) : (
+              'Create'
+            )}
           </Button>
         </div>
 
