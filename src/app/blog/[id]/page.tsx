@@ -73,7 +73,8 @@ export default function Page() {
     };
 
     axios
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${params.id}`, config)
+      .get(`http://localhost:5050/blogs/${params.id}`, config)
+      // .get(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${params.id}`, config)
       .then((response) => {
         const updatedData = {
           ...response.data,

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 interface TagFilterProps {
   options: string[];
-  selectedOptions: string[];
-  onOptionChange: (options: string[]) => void;
+  selectedOptions: string;
+  onOptionChange: (options: string) => void;
 }
 
 const KitchenwareFilter: React.FC<TagFilterProps> = ({
@@ -14,9 +14,7 @@ const KitchenwareFilter: React.FC<TagFilterProps> = ({
   const [activeOptions, setActiveOptions] = useState(selectedOptions);
 
   const handleOptionChange = (option: string) => {
-    const updatedOptions = activeOptions.includes(option)
-      ? activeOptions.filter((opt) => opt !== option)
-      : [...activeOptions, option];
+    const updatedOptions = activeOptions === option ? "" : option; // ถ้าเลือกอยู่จะลบออก ถ้าไม่เลือกจะเพิ่ม
     setActiveOptions(updatedOptions);
     onOptionChange(updatedOptions);
   };
