@@ -87,7 +87,7 @@ const LongCard = ({ card, onDelete }: CardProps) => {
                 ></path>{" "}
               </g>
             </svg>
-            {"1.00 ชม"}
+            {card.time}
           </div>
           <div className="flex items-center text-[rgb(136,136,136)] mr-2">
             <svg
