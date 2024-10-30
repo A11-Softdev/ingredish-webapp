@@ -38,11 +38,12 @@ export default function Page() {
   const [data, setData] = useState<Recipe>();
   const [open, setOpen] = React.useState<boolean>(false);
   const router = useRouter();
+  const userId = useState(Cookies.get("userId"));
 
   const handleDelete = async () => {
-    alert("Delete post");
+    alert("Delete post success");
     axios
-      .delete(`http://localhost:5050/blogs/${params.id}`)
+      .delete(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${params.id}`)
       .then((response) => {})
       .catch((error) => {
         console.error("Error deleting the blog post:", error);
@@ -72,7 +73,7 @@ export default function Page() {
     };
 
     axios
-      .get(`http://localhost:5050/blogs/${params.id}`, config)
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${params.id}`, config)
       .then((response) => {
         const updatedData = {
           ...response.data,
@@ -113,12 +114,7 @@ export default function Page() {
               />
             </a>
             <div className="flex flex-col ">
-              <a
-                href={`/profile/${data?.user._id}`}
-                className="text-2xl font-bold"
-              >
-                {data?.user.username}
-              </a>
+              <a href={`/profile/${data?.user._id}`} className="text-2xl font-bold">{data?.user.username}</a>
               <p className="text-gray-500">โพสต์เมื่อ {data?.createdAt}</p>
             </div>
           </div>
@@ -218,7 +214,7 @@ export default function Page() {
           <FontAwesomeIcon className="mr-2" icon={faHeart} /> ถูกใจสูตร
         </button>
         {/* if user is owner of blog */}
-        {data?.user === "66e3a3da9c7c2fe955645c8c" && (
+        {data?.user._id === userId && (
           <>
             <button
               onClick={() => {
