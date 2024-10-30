@@ -35,7 +35,22 @@ const Page: React.FC = () => {
     "ไมโครเวฟ",
     "เตาย่าง",
     "เตาแก๊ส",
+    "หม้ออบลมร้อน", // Air fryer
+    "หม้อหุงข้าว", // Rice cooker
+    "เครื่องบดสับ", // Food processor
+    "เครื่องกดกาแฟ", // Coffee maker
+    "เตาไฟฟ้า", // Electric stove
+    "อุปกรณ์นึ่ง", // Steamer
+    "เครื่องทำโยเกิร์ต", // Yogurt maker
+    "เตาเผา", // Grill
+    "อุปกรณ์ทำขนม", // Pastry tools
+    "อุปกรณ์ทำพาสต้า", // Pasta maker
+    "กระบอกฉีด", // Piping bag
+    "เครื่องทำไอศกรีม", // Ice cream maker
+    "อุปกรณ์ทำซูชิ", // Sushi making kit
+    "เครื่องทำฟองนม", // Milk frother
   ];
+  
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -161,7 +176,7 @@ const Page: React.FC = () => {
             {/* Kitchen Tools Checkboxes */}
             <div className="flex flex-col gap-4">
             <label htmlFor="optional_dish" className="text-xl font-semibold">
-                เคริ่องครัว
+                เครื่องครัว
               </label>
               <div>
                 <input

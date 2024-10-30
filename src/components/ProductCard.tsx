@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 interface Product {
   _id: string;
-  image_url: string;
+  image_url?: string;
   name: string;
   description: string;
   sold: number;
@@ -53,7 +53,7 @@ export default function ProductCard({ product,manage }: { product: Product,manag
       {/* Image container */}
       <div className="max-w-40 h-full">
         <img
-          src={product.image_url}
+          src={product.image_url ?? "https://media.istockphoto.com/id/1055079680/vector/black-linear-photo-camera-like-no-image-available.jpg?s=612x612&w=0&k=20&c=P1DebpeMIAtXj_ZbVsKVvg-duuL0v9DlrOZUvPG6UJk="}
           alt="product image"
           className="object-cover h-full rounded-lg"
         />
