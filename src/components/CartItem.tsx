@@ -11,6 +11,7 @@ type Props = {
   img: string;
   quantity: number;
   productId: string;
+  
   onQuantityChange: (productId: string, newQuantity: number) => void;
   onDelete: (productId: string) => void;
   stock: number;

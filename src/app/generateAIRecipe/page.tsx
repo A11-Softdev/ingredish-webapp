@@ -5,6 +5,7 @@ import { faShare } from "@fortawesome/free-solid-svg-icons/faShare";
 import axios from "axios";
 import { RecipeResponse } from "./types/menuTypes";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   optional_dish: string;
@@ -26,6 +27,7 @@ const Page: React.FC = () => {
   const [responseData, setResponseData] = useState<RecipeResponse | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
 
   const suppliesOptions = [
     "กระทะ",
@@ -141,12 +143,11 @@ const Page: React.FC = () => {
   return (
     <>
       <div className="flex w-full px-14 bg-slate-200 justify-center">
-        
         <div className="w-2/5 p-12 bg-white rounded-lg shadow-md ">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="text-3xl font-bold mt-4 text-center">
-            สร้างเมนูจาก AI
-          </div>
+              สร้างเมนูจาก AI
+            </div>
             {/* Menu Input */}
             <div>
               <label htmlFor="optional_dish" className="text-xl font-semibold">
@@ -315,7 +316,16 @@ const Page: React.FC = () => {
       {/* Share Button */}
       {responseData && !errorMessage && (
         <div className="flex w-full min-w-[100px] pt-8 justify-end bg-slate-200 text-white ">
-          <button className="mb-4 rounded-[30px] mr-[100px] p-4 px-12 font-bold text-lg bg-[#80AA50]">
+          <button
+            className="mb-4 rounded-[30px] mr-[100px] p-4 px-12 font-bold text-lg bg-[#80AA50]"
+            onClick={() => {
+              router.push(
+                `/createBlog?data=${encodeURIComponent(
+                  JSON.stringify(responseData)
+                )}`
+              );
+            }}
+          >
             <FontAwesomeIcon className="mr-2" icon={faShare} />
             แบ่งปันสูตรนี้
           </button>

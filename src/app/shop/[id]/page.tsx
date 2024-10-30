@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input } from "@nextui-org/react";
+import { image, Input } from "@nextui-org/react";
 import { Tab, Tabs, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import ShopCard from "@/components/ShopCard";
@@ -38,6 +38,7 @@ export default function Page() {
           owner: response.data.user.username,
           contact: response.data.contact,
           address: response.data.address,
+          image_url: response.data.image_url,
         });
       })
       .catch((error) => {
