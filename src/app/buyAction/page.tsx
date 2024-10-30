@@ -24,7 +24,7 @@ const BuyAction: React.FC = () => {
     name: "Shikanoko",
     owner: "Takanoko",
     description: "Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko",
-    contact: "contact",
+    contact: ["Contact"],
     address:
       "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345",
   };
