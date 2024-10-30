@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import InputFileUpload from './components/InputFileUpload';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
-import { createBlogApi } from '@/app/createBlog/api/createBlog'; // Import API function
+import { createBlogApi } from '@/app/createBlog/api/createBlog';
+import { uploadBlogImage } from '@/utils/uploadImage';
+import { compressImage } from '@/utils/uploadImage';
+import { toast } from 'react-hot-toast';
 
 const CreateBlog = () => {
   const [ingredient, setIngredients] = useState(['']);
@@ -23,6 +24,41 @@ const CreateBlog = () => {
   const [IsGenerated, setIsGenerated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [formData, setFormData] = useState({
+    name: '',
+    image_url: '',
+    contact: [''],
+    address: '',
+    phone: '',
+    product: [] as string[]
+});
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+
+        const compressedFile = await compressImage(file);
+        setImageFile(compressedFile);
+      } catch (error) {
+        toast.error('Error preparing image for upload');
+        console.error('Image preparation error:', error);
+      }
+    }
+  };
 
   // Functions to handle input updates
   const addIngredient = () => setIngredients([...ingredient, '']);
@@ -46,7 +82,7 @@ const CreateBlog = () => {
 
   const handleSubmit = async () => {
     const blogData = {
-      //image_url,
+      image_url,
       name,
       description,
       serve,
@@ -58,6 +94,15 @@ const CreateBlog = () => {
     };
 
     try {
+      let imageUrl = '';
+      if (imageFile) {
+        setIsUploading(true);
+        imageUrl = await uploadBlogImage(imageFile, (progress) => {
+          setUploadProgress(progress);
+        });
+        setIsUploading(false);
+      }
+
       const response = await createBlogApi.createBlog(blogData);
       setSuccess("Blog created successfully!");
       setError(null); // Clear any previous errors
@@ -71,7 +116,7 @@ const CreateBlog = () => {
     <div className='flex justify-center h-full'>
       <div className='bg-white text-black w-4/5 flex flex-col items-center'>
         <h1 className='text-4xl font-semibold m-6 text-center'>Share The Recipe<br />You Discovered!</h1>
-        
+
         {/* Upload Image */}
         <div className='bg-slate-600 flex justify-center items-center w-60 h-60 p-5 m-6 rounded-xl'>
           <InputFileUpload />
