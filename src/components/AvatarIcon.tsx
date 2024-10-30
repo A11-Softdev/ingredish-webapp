@@ -41,7 +41,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ onLogout }) => {
             My Profile
           </Link>
           <Link
-            href="/"
+            href="/shop/manage"
             className="block p-2 hover:bg-[rgb(34,34,34)] hover:text-[rgb(237,179,07)] text-center rounded"
           >
             My Shop

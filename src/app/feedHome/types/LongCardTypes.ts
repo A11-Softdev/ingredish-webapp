@@ -2,7 +2,7 @@ export interface LongCardDataProps {
     _id:string;
     user:string;
     name:string;
-    role:string;
+    Role:string;
     image_url?:string;
     serve:number;
     ingredient:string[];
@@ -10,9 +10,9 @@ export interface LongCardDataProps {
     recipe:string[];
     review:string[];
     createdAt:Date;
-    rating:number;
     IsGenerated?:boolean;
     source:string;
+    time:string;
 }
 
 export interface BlogsProps{
