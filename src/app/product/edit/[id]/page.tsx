@@ -40,7 +40,7 @@ export default function Page({ params }: { params: { id: string } }) {
     name: "Shikanoko",
     owner: "Takanoko",
     description: "Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko",
-    contact: "contact",
+    contact: ["contact"],
     address:
       "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345",
   };

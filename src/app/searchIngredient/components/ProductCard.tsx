@@ -16,8 +16,8 @@ const ProductCard = ({
   return (
     <div className="bg-white ">
       <Link href={`/product/${_id}`} key={_id}>
-        <div className="border-1.5 min-h-48 m-1">
-          <img src={image_url} alt="\picture ingredient" />
+        <div className="border-1.5 h-48 m-1">
+          <img src={image_url} alt="\picture ingredient" className="h-full w-full" />
         </div>
 
         <div className="m-1 font-semibold text-md">{name}</div>
