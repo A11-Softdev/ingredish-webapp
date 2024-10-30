@@ -121,6 +121,7 @@ export default function ShopCreationForm() {
 
             const shopData = {
                 ...formData,
+                user: '',
                 image_url: imageUrl || formData.image_url,
                 contact: formData.contact.filter(c => c.trim()),
             };
