@@ -349,7 +349,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
       </form>
-      <ConfirmationModal open={isModalOpen} setOpen={setIsModalOpen} handleSubmit={handleSubmit}></ConfirmationModal>
+      <ConfirmationModal title="ต้องการที่แก้ไขข้อมูลสินค้าใช่หรือไม่" open={isModalOpen} setOpen={setIsModalOpen} handleSubmit={handleSubmit}></ConfirmationModal>
     </div>
   );
 }

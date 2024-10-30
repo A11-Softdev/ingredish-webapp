@@ -14,7 +14,7 @@ const Home = () => {
                         <p>
                             Discover a world of delicious, customizable<br />recipes perfect for every palate. Our platform<br />offers AI and user-generated food ideas tailored<br />to your tastes and dietary preferences.
                         </p>
-                        <button type="button" className="bg-dark-yellow rounded-md px-4 py-2 font-bold my-5">
+                        <button type="button" className="bg-dark-yellow rounded-md px-4 py-2 font-bold my-5 mr-5">
                             Get Started!
                         </button>
                         <button type="button" className="bg-gray-300 rounded-md px-4 py-2 font-bold">

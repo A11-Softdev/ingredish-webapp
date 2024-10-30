@@ -9,11 +9,17 @@ interface ShopCard {
   name: string;
   owner: string;
   description: string;
-  contact: string;
+  contact: string[];
   address: string;
 }
 
-export default function ShopCard({ shop ,manage }: { shop: ShopCard,manage:boolean }) {
+export default function ShopCard({
+  shop,
+  manage,
+}: {
+  shop: ShopCard;
+  manage: boolean;
+}) {
   return (
     <div className="flex gap-4 flex-row w-full p-8">
       {/* Image container */}
@@ -28,11 +34,18 @@ export default function ShopCard({ shop ,manage }: { shop: ShopCard,manage:boole
       <div className="flex flex-row bg-white border-2 border-black rounded-xl grow p-4 relative ">
         <div className="flex grow flex-col">
           <div className="flex gap-2">
-            <span className="text-xl">{shop.name}</span>
+            <span className="text-xl font-bold">{shop.name}</span>
             <span className="flex items-end">{shop.owner}</span>
           </div>
           <div className="mt-2">{shop.description}</div>
-          <div className="mt-2">{shop.contact}</div>
+          <div className="mt-2 flex flex-col">
+            <span className="font-semibold">ช่องทางการติดต่อ</span>
+            <div className="flex flex-row gap-3">
+              {shop.contact.map((contactInfo, index) => (
+                <p key={index}>{contactInfo}</p>
+              ))}
+            </div>
+          </div>
           <div className="mt-2">
             <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
             {shop.address}
