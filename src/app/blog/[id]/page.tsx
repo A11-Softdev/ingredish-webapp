@@ -24,7 +24,7 @@ interface Recipe {
   name: string;
   Role: string;
   image_url: string;
-  time:string;
+  time: string;
   serve: number;
   ingredient: string[];
   kitchentools: string[];
@@ -57,7 +57,7 @@ export default function Page() {
     const token = Cookies.get("token");
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     };
 
@@ -85,7 +85,6 @@ export default function Page() {
       .catch((error) => {
         console.error("Error fetching the blog data:", error);
       });
-
   }, [params.id]);
   return (
     <div className="flex flex-row w-3/5 p-10 gap-6 mx-auto b  g-zinc-100">
