@@ -2,7 +2,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 interface CreateShopDto {
-    user: string;
     name: string;
     image_url?: string;
     contact: string[];

@@ -1,18 +1,23 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import SettingCard from "./SettingCard";
+import { LongCardDataProps } from "../types/LongCardTypes";
+import { fetchUser } from "../api/getUser";
+import Link from "next/link";
 
-interface CardProps {
-  imageUrl: string;
-  title: string;
-  rating: number;
-  userName: string;
-  AItags: boolean;
-}
+type CardProps = {
+  card: LongCardDataProps;
+  onDelete: (id: string) => void;
+};
 
-const CardPost: React.FC<CardProps> = ({ imageUrl, title, rating, userName, AItags }) => {
+const CardPost = ({ card, onDelete }: CardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userName, setUserName] = useState<string>("unknow");
+
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFavoriteToggle = () => {
     setIsFavorite(!isFavorite);
@@ -22,57 +27,51 @@ const CardPost: React.FC<CardProps> = ({ imageUrl, title, rating, userName, AIta
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const getUser = async () => {
+    try {
+      const temp = await fetchUser(card.user);
+      console.log("Fetched data:", temp);
+
+      setUserName(temp.username);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+      setError("Failed to load blogs.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  });
+
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden w-64">
       <div className="relative">
-        <img src={imageUrl} alt={title} className="w-full h-40 object-cover" />
+        <img
+          src={card.image_url}
+          alt={card.name}
+          className="w-full h-40 object-cover"
+        />
         <div className="absolute top-2 right-2">
-          <button
-            onClick={handleMenuToggle}
-            className="text-gray-600 hover:text-gray-800 focus:outline-none bg-yellow-400 rounded-md"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="black"
-              strokeWidth={4}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6v.01M12 12v.01M12 18v.01"
-              />
-            </svg>
-          </button>
-          {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-yellow-400 rounded-md shadow-lg py-1">
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm bg-yellow-400 text-black hover:bg-gray-100"
-              >
-                แก้ไขโพสต์
-              </a>
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm bg-yellow-400 text-black hover:bg-gray-100"
-              >
-                ลบโพสต์
-              </a>
-            </div>
-          )}
+          <SettingCard
+            user_id={card.user}
+            blog_id={card._id}
+            onDelete={onDelete}
+          />
         </div>
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-bold">{title}</h3>
+        <Link href={`/blog/${card._id}`} key={card._id}>
+          <h3 className="text-lg font-bold">{card.name}</h3>
+        </Link>
         <div className="flex flex-wrap w-full py-2 border-b-1 border-yellow-400">
-          {AItags && (
+          {card.IsGenerated && (
             <span className="bg-blue-100 text-blue-600 text-xs font-semibold px-2 py-1 rounded-full">
               Recipe by AI
-            </span>          
+            </span>
           )}
-          {!AItags && (
+          {!card.IsGenerated && (
             <span className="bg-red-100 text-red-600 text-xs font-semibold px-2 py-1 rounded-full">
               Recipe by User
             </span>
@@ -82,7 +81,7 @@ const CardPost: React.FC<CardProps> = ({ imageUrl, title, rating, userName, AIta
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center">
             <span className="text-yellow-500">★</span>
-            <span className="text-gray-600 ml-1">{rating}/5</span>
+            <span className="text-gray-600 ml-1">{4}/5</span>
           </div>
           <button onClick={handleFavoriteToggle} className="focus:outline-none">
             {isFavorite ? (
