@@ -15,7 +15,7 @@ const ProductCard = ({
 }: ProductProps) => {
   return (
     <div className="bg-white ">
-      <Link href={`/home`} key={_id}>
+      <Link href={`/product/${_id}`} key={_id}>
         <div className="border-1.5 min-h-48 m-1">
           <img src={image_url} alt="\picture ingredient" />
         </div>
@@ -27,7 +27,7 @@ const ProductCard = ({
         </div>
         <div className="flex m-1 gap-3 font-medium text-sm">
           <div className="flex items-center">
-          <svg
+            <svg
               width="15px"
               height="15px"
               viewBox="0 0 24 24"
