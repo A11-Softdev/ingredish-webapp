@@ -30,8 +30,8 @@ const LongCard = ({ card, onDelete }: CardProps) => {
         setLoading(false);
       }
     };
-    getUser(card.user_id);
-  }, [card.user_id]);
+    getUser(card.user);
+  }, [card.user]);
   return (
     <div className="bg-white w-full h-full min-h-28 grid grid-cols-5 border z-0">
       <div className="grid col-span-4 z-0 ml-3 mt-3 ">
@@ -87,7 +87,7 @@ const LongCard = ({ card, onDelete }: CardProps) => {
                 ></path>{" "}
               </g>
             </svg>
-            {"1.00 ชม"}
+            {card.time}
           </div>
           <div className="flex items-center text-[rgb(136,136,136)] mr-2">
             <svg
@@ -157,7 +157,7 @@ const LongCard = ({ card, onDelete }: CardProps) => {
       <div className="relative z-50">
         <div className="absolute right-0 m-2">
           <SettingCard
-            user_id={card.user_id}
+            user_id={card.user}
             blog_id={card._id}
             onDelete={onDelete}
           />

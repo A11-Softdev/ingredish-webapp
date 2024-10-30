@@ -92,6 +92,48 @@ export const uploadProductImage = async (
   });
 };
 
+export const uploadBlogImage = async(
+  file: File,
+  onProgress?: (progress: number) => void
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const timestamp = Date.now();
+      const fileExtension = file.name.split('.').pop();
+      const fileName = `blogs/${timestamp}.${fileExtension}`;
+      const storageRef = ref(storage, fileName);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (onProgress) {
+            onProgress(progress);
+          }
+        },
+        (error) => {
+          console.error('Upload error:', error);
+          reject(new Error('Failed to upload image'));
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          } catch (error) {
+            console.error('Get URL error:', error);
+            reject(new Error('Failed to get image URL'));
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Upload setup error:', error);
+      reject(new Error('Failed to initialize upload'));
+    }
+  });
+};
+
 export const compressImage = async (file: File): Promise<File> => {
   const options = {
     maxSizeMB: 1,

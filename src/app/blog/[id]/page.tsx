@@ -20,11 +20,11 @@ interface Recipe {
   IsGenerated: boolean;
   description: string;
   _id: string;
-  user_id: any;
+  user: any;
   name: string;
   Role: string;
   image_url: string;
-  time:string;
+  time: string;
   serve: number;
   ingredient: string[];
   kitchentools: string[];
@@ -38,11 +38,12 @@ export default function Page() {
   const [data, setData] = useState<Recipe>();
   const [open, setOpen] = React.useState<boolean>(false);
   const router = useRouter();
-  
+  const userId = useState(Cookies.get("userId"));
+
   const handleDelete = async () => {
-    alert("Delete post");
+    alert("Delete post success");
     axios
-      .delete(`http://localhost:5050/blogs/${params.id}`)
+      .delete(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${params.id}`)
       .then((response) => {})
       .catch((error) => {
         console.error("Error deleting the blog post:", error);
@@ -56,7 +57,7 @@ export default function Page() {
     const token = Cookies.get("token");
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     };
 
@@ -73,6 +74,7 @@ export default function Page() {
 
     axios
       .get(`http://localhost:5050/blogs/${params.id}`, config)
+      // .get(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${params.id}`, config)
       .then((response) => {
         const updatedData = {
           ...response.data,
@@ -84,7 +86,6 @@ export default function Page() {
       .catch((error) => {
         console.error("Error fetching the blog data:", error);
       });
-
   }, [params.id]);
   return (
     <div className="flex flex-row w-3/5 p-10 gap-6 mx-auto b  g-zinc-100">
@@ -105,16 +106,16 @@ export default function Page() {
         </div>
         <div className="shadow-lg rounded-lg p-4">
           <div className="flex flex-row items-center gap-2">
-            <a href={`/profile/${data?.user_id._id}`}>
+            <a href={`/profile/${data?.user._id}`}>
               <img
-                src={data?.user_id.image_url}
+                src={data?.user.image_url}
                 alt="profile image"
                 width={50}
                 className="rounded-3xl"
               />
             </a>
             <div className="flex flex-col ">
-              <a href={`/profile/${data?.user_id._id}`} className="text-2xl font-bold">{data?.user_id.username}</a>
+              <a href={`/profile/${data?.user._id}`} className="text-2xl font-bold">{data?.user.username}</a>
               <p className="text-gray-500">โพสต์เมื่อ {data?.createdAt}</p>
             </div>
           </div>
@@ -214,7 +215,7 @@ export default function Page() {
           <FontAwesomeIcon className="mr-2" icon={faHeart} /> ถูกใจสูตร
         </button>
         {/* if user is owner of blog */}
-        {data?.user_id === "66e3a3da9c7c2fe955645c8c" && (
+        {data?.user._id === userId && (
           <>
             <button
               onClick={() => {
