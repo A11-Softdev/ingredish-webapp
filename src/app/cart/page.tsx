@@ -82,7 +82,7 @@ function Page() {
               key={index}
               name={item.productId.name}
               price={item.productId.price}
-              store={item.productId.store}
+              store={item.productId.shopId.name}
               productId={item.productId._id}
               quantity={item.amount}
               stock={item.productId.amount}
