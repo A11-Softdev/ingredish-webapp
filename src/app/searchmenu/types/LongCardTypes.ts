@@ -1,6 +1,6 @@
 export interface LongCardDataProps {
     _id:string;
-    user_id:string;
+    user:string;
     name:string;
     role:string;
     image_url?:string;
