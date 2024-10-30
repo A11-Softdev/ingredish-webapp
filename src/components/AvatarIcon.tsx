@@ -35,13 +35,13 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ onLogout }) => {
       {isClick && (
         <div className="absolute top-full font-semibold right-0 mt-2 w-32 bg-[rgb(237,179,07)] rounded-md shadow-lg">
           <Link
-            href="/"
+            href="/profile"
             className="block p-2 hover:bg-[rgb(34,34,34)] hover:text-[rgb(237,179,07)] text-center rounded"
           >
             My Profile
           </Link>
           <Link
-            href="/"
+            href="/shop/manage"
             className="block p-2 hover:bg-[rgb(34,34,34)] hover:text-[rgb(237,179,07)] text-center rounded"
           >
             My Shop

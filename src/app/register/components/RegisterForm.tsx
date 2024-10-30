@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { RegisterFormData } from '../types/RegisterTypes';
+import Link from 'next/link';
 
 interface RegisterFormProps {
   onSubmit: (data: RegisterFormData) => void;
@@ -47,6 +48,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
       <button type="submit" className="w-full bg-dark-yellow p-2 rounded-xl">
         Sign Up
       </button>
+      <p>or</p>
+      <p>Already have account</p>
+      <Link
+        href="/login"
+
+      >
+        <button className="w-min px-20 mt-3 bg-dark-yellow p-2 rounded-xl">Login</button>
+
+      </Link>
     </form>
   );
 };

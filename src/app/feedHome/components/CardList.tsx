@@ -1,4 +1,4 @@
-'use clint'
+'use client'
 
 import React, {useRef} from 'react'
 import CardPost from './CardPost';

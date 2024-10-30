@@ -6,22 +6,12 @@ import FavIcon from "./FavIcon";
 import { fetchUser } from "../api/getUser";
 import Link from "next/link";
 
-const LongCard = ({
-  _id,
-  user_id,
-  name,
-  role,
-  image_url,
-  serve,
-  ingredient,
-  kitchentools,
-  recipe,
-  review,
-  createdAt,
-  rating,
-  isGenByAI,
-  source,
-}: LongCardDataProps) => {
+type CardProps = {
+  card: LongCardDataProps;
+  onDelete: (id: string) => void;
+};
+
+const LongCard = ({ card, onDelete }: CardProps) => {
   const [username, setUsername] = useState<string>("unknow");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,14 +30,14 @@ const LongCard = ({
         setLoading(false);
       }
     };
-    getUser(user_id);
-  });
+    getUser(card.user_id);
+  }, [card.user_id]);
   return (
-    <div className="w-full h-full min-h-28 grid grid-cols-5 border z-0">
+    <div className="bg-white w-full h-full min-h-28 grid grid-cols-5 border z-0">
       <div className="grid col-span-4 z-0 ml-3 mt-3 ">
-        <Link href={`/home`} key={_id} className="flex -z-10">
-          <div className="text-lg font-semibold">{name}</div>
-          {isGenByAI && (
+        <Link href={`/blog/${card._id}`} key={card._id} className="flex -z-10">
+          <div className="text-lg font-semibold">{card.name}</div>
+          {card.IsGenerated && (
             <img
               src="/hugeicons_ai-chat-02.png"
               alt="Menu"
@@ -57,10 +47,10 @@ const LongCard = ({
         </Link>
 
         <div className="flex">
-          {ingredient.map((ingre, index) => (
+          {card.ingredient.map((ingre, index) => (
             <p key={ingre} className="mr-1">
               {ingre}
-              {index < ingredient.length - 1 && " •"}{" "}
+              {index < card.ingredient.length - 1 && " •"}{" "}
               {/* Add " •" only if it's not the last item */}
             </p>
           ))}
@@ -118,7 +108,7 @@ const LongCard = ({
                 <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
               </g>
             </svg>
-            {serve}
+            {card.serve}
           </div>
           <div className="flex items-center">
             <svg
@@ -153,7 +143,7 @@ const LongCard = ({
         <div className="flex justify-between">
           <div className=" flex gap-2 items-center">
             {username}
-            {isGenByAI && (
+            {card.IsGenerated && (
               <div className="text-[rgb(66,110,134)] text-xs font-semibold">
                 หมายเหตุสูตรนี้มี Ref จาก A.I.
               </div>
@@ -166,16 +156,24 @@ const LongCard = ({
 
       <div className="relative z-50">
         <div className="absolute right-0 m-2">
-          <SettingCard username={username} />
+          <SettingCard
+            user_id={card.user_id}
+            blog_id={card._id}
+            onDelete={onDelete}
+          />
         </div>
-        {image_url == null ? (
+        {card.image_url == null ? (
           <img
             src="/bg_menu.png"
             alt="default picture menu"
             className="-z-10 h-full"
           />
         ) : (
-          <img src={image_url} alt="\picture menu" className="-z-10 h-full" />
+          <img
+            src={card.image_url}
+            alt="\picture menu"
+            className="-z-10 h-full"
+          />
         )}
       </div>
     </div>

@@ -18,14 +18,39 @@ export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   const shop = {
-    id: "1234",
-    name: "Shikanoko",
-    owner: "Takanoko",
-    description: "Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko Shikanoko",
-    contact: "contact",
-    address:
-      "123/456 Shikanoko town Shikanoko city Shikanoko country Shikanoko 12345",
-  };
+    _id: "66ee3bfa78734c830d95a646",
+    user_id: {
+        _id: "66e3a3da9c7c2fe955645c8c",
+        username: "HomTest",
+        email: "HomTest@gmail.com",
+        password: "$2a$10$sFxPVvFMfkoJfZFG30aOzOu0c3rTZFmhr/Tfyc.a0aV7AXx2QNDlC",
+        image_url: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        role: "customer",
+        createdAt: "2024-09-13T02:30:50.299Z",
+        updatedAt: "2024-09-15T23:48:21.656Z",
+        __v: 0
+    },
+    name: "HomTestShop",
+    image_url: "https://thumbs.dreamstime.com/b/vegetables-diet-food-background-vector-raw-vegetable-foods-healthy-seamless-pattern-organic-vegetarian-natural-83292835.jpg?w=768",
+    contact: [
+        "HomTestContact"
+    ],
+    address: "HomTestAddress",
+    product: [
+        "66f13ff8061d66ce8ab4cc56",
+        "66f14000061d66ce8ab4cc5e"
+    ],
+    createdAt: "2024-09-21T03:22:34.973Z"
+}
+
+const transformedShop = {
+  id: shop._id,
+  name: shop.name,
+  owner: shop.user_id.username, // Using the username from user_id as the owner
+  description: "This is the description for the shop Hope you have a nice day na krub please review 5 star for our product", // Assuming you want a static description
+  contact: shop.contact, 
+  address: shop.address
+};
 
   const products = [
     {
@@ -115,7 +140,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className="flex w-[85vw] min-h-[81vh] mx-auto bg-background flex-col">
       {/* shop-detail */}
-      <ShopCard shop={shop} manage={false} />
+      <ShopCard shop={transformedShop} manage={false} />
 
       {/* Tabs, Filter, Search */}
       <div className="flex w-full justify-evenly items-center  border-b-2 border-gray-300 ">
