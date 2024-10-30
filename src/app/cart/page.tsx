@@ -12,20 +12,22 @@ interface CartItemType {
 };
 
 
-
+// เพิ่มลดของ ใส่ productId กับ amount
 
 function Page() {
   const token = Cookies.get('token');
+  const uid = Cookies.get('userId')
   const [cartItems, setCartItems] = useState<CartItemType[]>();
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/cart`, {
+    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/carts/my-cart`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
     .then((response) => {
       console.log(response.data);
-      setCartItems(response.data);
+      
+      setCartItems(response.data.products);
     })
     .catch((error) => {
       console.error('Error fetching cart items:', error);

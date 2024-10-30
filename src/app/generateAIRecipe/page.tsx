@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/free-solid-svg-icons/faShare";
 import axios from "axios";
 import { RecipeResponse } from "./types/menuTypes";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type FormValues = {
   optional_dish: string;
@@ -50,7 +51,6 @@ const Page: React.FC = () => {
     "อุปกรณ์ทำซูชิ", // Sushi making kit
     "เครื่องทำฟองนม", // Milk frother
   ];
-  
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -110,16 +110,18 @@ const Page: React.FC = () => {
           ingredients: formValues.ingredients,
           supplies: formValues.supplies,
         };
-        console.log("Submission data:", submissionData);
+        // console.log("Submission data:", submissionData);
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_BASE_URL}/generate-recipe/`,
           submissionData
         );
 
         const data: RecipeResponse = response.data;
-
+        console.log("Response data:", data);
         if (data.Menu.error) {
-          setErrorMessage(data.Menu.raw_response || "An unknown error occurred.");
+          setErrorMessage(
+            data.Menu.raw_response || "An unknown error occurred."
+          );
           setResponseData(data);
         } else {
           setResponseData(data);
@@ -138,9 +140,13 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <div className="flex w-full px-14 bg-slate-200 justify-center">
-        <div className="w-2/5 p-12 bg-white rounded-lg shadow-md">
+      <div className="flex w-full px-14 bg-slate-200 justify-center relative">
+        
+        <div className="w-2/5 p-12 bg-white rounded-lg shadow-md ">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <div className="text-2xl font-bold mt-4 text-center">
+            สร้างเมนูจาก AI
+          </div>
             {/* Menu Input */}
             <div>
               <label htmlFor="optional_dish" className="text-xl font-semibold">
@@ -175,7 +181,7 @@ const Page: React.FC = () => {
 
             {/* Kitchen Tools Checkboxes */}
             <div className="flex flex-col gap-4">
-            <label htmlFor="optional_dish" className="text-xl font-semibold">
+              <label htmlFor="optional_dish" className="text-xl font-semibold">
                 เครื่องครัว
               </label>
               <div>
@@ -229,7 +235,13 @@ const Page: React.FC = () => {
               disabled={isSubmitting}
               className="bg-[#80AA50] text-white py-2 px-4 rounded hover:bg-[#5b7938]"
             >
-              {isSubmitting ? "Submitting..." : "Generate Recipe"}
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} /> Submitting...{" "}
+                </>
+              ) : (
+                "Generate Recipe"
+              )}
             </button>
           </form>
         </div>
@@ -242,7 +254,7 @@ const Page: React.FC = () => {
             </div>
           </div>
         )}
-        {responseData && !errorMessage  && (
+        {responseData && !errorMessage && (
           <div className="w-3/5 px-12 pt-8 flex flex-col gap-4 justify-between ">
             <div className="text-center text-4xl font-bold mb-4">Result!</div>
             {
@@ -277,7 +289,8 @@ const Page: React.FC = () => {
                       >
                         {ingredient.name}
                       </a>{" "}
-                      {ingredient.quantity} {ingredient.preparation != "เตรียมไว้"}
+                      {ingredient.quantity}{" "}
+                      {ingredient.preparation != "เตรียมไว้"}
                     </li>
                   )
                 )}
@@ -298,10 +311,9 @@ const Page: React.FC = () => {
             }
           </div>
         )}
-
       </div>
       {/* Share Button */}
-      {responseData && !errorMessage  && (
+      {responseData && !errorMessage && (
         <div className="flex w-full min-w-[100px] pt-8 justify-end bg-slate-200 text-white ">
           <button className="mb-4 rounded-[30px] mr-[100px] p-4 px-12 font-bold text-lg bg-[#80AA50]">
             <FontAwesomeIcon className="mr-2" icon={faShare} />
