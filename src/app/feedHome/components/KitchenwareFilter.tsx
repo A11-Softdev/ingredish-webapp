@@ -1,0 +1,43 @@
+import React, { useState } from 'react';
+
+interface TagFilterProps {
+  options: string[];
+  selectedOptions: string[];
+  onOptionChange: (options: string[]) => void;
+}
+
+const KitchenwareFilter: React.FC<TagFilterProps> = ({
+  options,
+  selectedOptions,
+  onOptionChange,
+}) => {
+  const [activeOptions, setActiveOptions] = useState(selectedOptions);
+
+  const handleOptionChange = (option: string) => {
+    const updatedOptions = activeOptions.includes(option)
+      ? activeOptions.filter((opt) => opt !== option)
+      : [...activeOptions, option];
+    setActiveOptions(updatedOptions);
+    onOptionChange(updatedOptions);
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((option) => (
+        <button
+          key={option}
+          className={`rounded-full px-4 py-2 text-sm font-medium ${
+            activeOptions.includes(option)
+              ? 'bg-black text-yellow-400'
+              : 'bg-gray-200 text-gray-600'
+          }`}
+          onClick={() => handleOptionChange(option)}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+export default KitchenwareFilter;
