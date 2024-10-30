@@ -6,6 +6,7 @@ interface ConfirmationModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   handleSubmit: () => Promise<void>;
+  handleCancel?: () => void;
 }
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -13,6 +14,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
   open,
   setOpen,
   handleSubmit,
+  handleCancel,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -68,6 +70,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
               className="px-4 py-1 bg-[#4D4D4E] hover:bg-[#39393a] font-bold rounded-md text-white"
               onClick={(e) => {
                 e.stopPropagation(); // Stop the event from propagating
+                if (handleCancel) handleCancel(); // Call handleCancel if provided
                 setOpen(false); // Close the modal
               }}
               disabled={loading} // Optionally disable cancel during loading
