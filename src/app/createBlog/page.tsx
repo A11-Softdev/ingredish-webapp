@@ -13,21 +13,21 @@ import CreateIcon from '@mui/icons-material/Create';
 import { createBlogApi } from '@/app/createBlog/api/createBlog'; // Import API function
 
 const CreateBlog = () => {
-  const [ingredients, setIngredients] = useState(['']);
+  const [ingredient, setIngredients] = useState(['']);
   const [steps, setSteps] = useState(['']);
   const [kitchenWare, setKitchenWare] = useState(['']);
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [serves, setServes] = useState(1);
-  const [time, setTime] = useState(0);
-  const [isGenerated, setIsGenerated] = useState(false);
+  const [serve, setServe] = useState(1);
+  const [time, setTime] = useState('');
+  const [IsGenerated, setIsGenerated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   // Functions to handle input updates
-  const addIngredient = () => setIngredients([...ingredients, '']);
+  const addIngredient = () => setIngredients([...ingredient, '']);
   const updateIngredient = (index: number, value: string) => {
-    const newIngredients = [...ingredients];
+    const newIngredients = [...ingredient];
     newIngredients[index] = value;
     setIngredients(newIngredients);
   };
@@ -46,14 +46,15 @@ const CreateBlog = () => {
 
   const handleSubmit = async () => {
     const blogData = {
-      title,
+      //image_url,
+      name,
       description,
-      serves,
+      serve,
       time,
-      ingredients,
-      kitchenWares: kitchenWare,
+      ingredient,
+      kitchentools: kitchenWare,
       recipe: steps,
-      isGenerated,
+      IsGenerated,
     };
 
     try {
@@ -83,8 +84,8 @@ const CreateBlog = () => {
           multiline
           maxRows={2}
           className='w-80 my-2'
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
         {/* Description Input */}
@@ -104,16 +105,15 @@ const CreateBlog = () => {
             label="How many serves?"
             id="serves"
             type='number'
-            value={serves}
-            onChange={(e) => setServes(parseInt(e.target.value))}
+            value={serve}
+            onChange={(e) => setServe(parseInt(e.target.value))}
             className='w-32 my-2'
           />
           <TextField
-            label="How long? (minutes)"
+            label="How long?(hh:mm)"
             id="time"
-            type='number'
             value={time}
-            onChange={(e) => setTime(parseInt(e.target.value))}
+            onChange={(e) => setTime(e.target.value)}
             className='w-32 my-2'
           />
         </div>
@@ -121,7 +121,7 @@ const CreateBlog = () => {
         {/* Ingredients */}
         <h2 className='w-80 flex justify-center text-2xl font-medium my-3 pt-2 border-t-4 border-yellow-400'>Ingredients</h2>
         <div className='flex flex-col items-center'>
-          {ingredients.map((ingredient, index) => (
+          {ingredient.map((ingredient, index) => (
             <TextField
               key={index}
               type="text"
@@ -176,17 +176,14 @@ const CreateBlog = () => {
 
         {/* AI Reference Checkbox */}
         <FormControlLabel
-          control={<Checkbox checked={isGenerated} onChange={(e) => setIsGenerated(e.target.checked)} />}
+          control={<Checkbox checked={IsGenerated} onChange={(e) => setIsGenerated(e.target.checked)} />}
           label="สูตรนี้มีการอ้างอิงมาจาก AI"
         />
 
         {/* Submit and Delete Buttons */}
-        <div className='w-80 flex justify-between my-8'>
+        <div className='w-80 flex justify-center my-8'>
           <Button variant="contained" endIcon={<CreateIcon />} onClick={handleSubmit} className='bg-green-600'>
             Create
-          </Button>
-          <Button variant="contained" endIcon={<DeleteIcon />} className='bg-red-600'>
-            Delete
           </Button>
         </div>
 

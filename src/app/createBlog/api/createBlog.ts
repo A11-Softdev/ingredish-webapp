@@ -3,26 +3,26 @@ import Cookies from 'js-cookie';
 
 interface CreateBlogDto {
     image_url?: string;
-    title: string;
+    name: string;
     description: string;
-    serves: number;
-    time: number;
-    ingredients: string[];
-    kitchenWares: string[];
+    serve: number;
+    time: string;
+    ingredient: string[];
+    kitchentools: string[];
     recipe: string[];
-    isGenerated: boolean;
+    IsGenerated: boolean;
 }
 
 interface Blog {
     image_url?: string;
-    title: string;
+    name: string;
     description: string;
-    serves: number;
-    time: number;
-    ingredients: string[];
-    kitchenWares: string[];
+    serve: number;
+    time: string;
+    ingredient: string[];
+    kitchentools: string[];
     recipe: string[];
-    isGenerated: boolean;
+    IsGenerated: boolean;
 }
 
 const API_URL = 'http://localhost:5050';
@@ -55,7 +55,7 @@ const handleApiError = (error: any) => {
 export const createBlogApi = {
     createBlog: async (blogData: CreateBlogDto): Promise<Blog> => {
         try {
-            const response = await apiClient.post('/Blogs', blogData);
+            const response = await apiClient.post('/blogs/create', blogData);
             return response.data;
         } catch (error) {
             throw handleApiError(error);
