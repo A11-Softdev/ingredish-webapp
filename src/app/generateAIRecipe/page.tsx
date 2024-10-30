@@ -140,11 +140,11 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <div className="flex w-full px-14 bg-slate-200 justify-center relative">
+      <div className="flex w-full px-14 bg-slate-200 justify-center">
         
         <div className="w-2/5 p-12 bg-white rounded-lg shadow-md ">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            <div className="text-2xl font-bold mt-4 text-center">
+            <div className="text-3xl font-bold mt-4 text-center">
             สร้างเมนูจาก AI
           </div>
             {/* Menu Input */}
@@ -282,7 +282,7 @@ const Page: React.FC = () => {
                   (ingredient, index) => (
                     <li key={index}>
                       <a
-                        href={`/search?name=${encodeURIComponent(
+                        href={`/searchIngredient?q=${encodeURIComponent(
                           ingredient.name
                         )}`}
                         className="text-blue-500 hover:underline"

@@ -59,7 +59,7 @@ function Page() {
       <div className='bg-dark-yellow w-2/5 flex justify-center text-4xl font-bold p-4 rounded-t-xl shadow-lg [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.8)]'>Your Cart</div>
       <div className='bg-background w-2/5 flex flex-col gap-4 p-8 rounded-b-xl shadow-xl items-center'>
         <div className='flex flex-col gap-4 w-full'>
-          {cartItems?.map((item, index) => (
+          {cartItems?.length != 0 && cartItems?.map((item, index) => (
             <CartItem
               key={index}
               name={item.name}
@@ -71,7 +71,7 @@ function Page() {
               onDelete={() => handleDelete(index)}  // Pass the delete function
             />
           ))}
-          {!cartItems && 
+          {cartItems?.length == 0 && 
           <div className='w-full flex flex-col items-center mb-5'>
             <div className=' w-full flex justify-center '>
               <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="" className='object-cover'/>
