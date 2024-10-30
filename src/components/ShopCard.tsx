@@ -8,9 +8,10 @@ interface ShopCard {
   id: string;
   name: string;
   owner: string;
-  description: string;
+  description?: string;
   contact: string[];
   address: string;
+  image_url?: string;
 }
 
 export default function ShopCard({
@@ -25,7 +26,7 @@ export default function ShopCard({
       {/* Image container */}
       <div className="rounded-lg max-w-[150px]">
         <img
-          src="https://i1.sndcdn.com/artworks-zYnSPKgrVqoZu1Oe-KxZZDg-t500x500.jpg"
+          src={shop.image_url ?? "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
           alt="shop image"
           className="rounded-lg object-cover h-full w-full"
         ></img>

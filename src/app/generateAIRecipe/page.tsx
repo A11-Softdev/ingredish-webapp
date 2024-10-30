@@ -97,7 +97,7 @@ const Page: React.FC = () => {
         };
         console.log("Submission data:", submissionData);
         const response = await axios.post(
-          `http://localhost:5050/generate-recipe/`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/generate-recipe/`,
           submissionData
         );
 

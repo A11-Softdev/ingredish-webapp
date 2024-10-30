@@ -13,8 +13,8 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 
 interface Product {
-  id: string;
-  img: string;
+  _id: string;
+  image_url: string;
   name: string;
   description: string;
   sold: number;
@@ -48,12 +48,12 @@ export default function ProductCard({ product,manage }: { product: Product,manag
   return (
     <div
       className="relative border border-black rounded-xl p-3 flex gap-4 max-h-[200px] bg-white hover:cursor-pointer hover:bg-yellow-50"
-      onClick={() => handleViewProduct(product.id)}
+      onClick={() => handleViewProduct(product._id)}
     >
       {/* Image container */}
       <div className="max-w-40 h-full">
         <img
-          src={product.img}
+          src={product.image_url}
           alt="product image"
           className="object-cover h-full rounded-lg"
         />
@@ -81,7 +81,7 @@ export default function ProductCard({ product,manage }: { product: Product,manag
             <DropdownItem
               key="edit"
               onClick={() => {
-                alert(product.id);
+                alert(product._id);
               }}
             >
               <FontAwesomeIcon icon={faPenToSquare} className="mr-3" />
