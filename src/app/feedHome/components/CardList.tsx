@@ -32,7 +32,7 @@ const CardList = ({ query, page }: CardListProps) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   //get Data
-  const getBlogs = async (query: string) => {
+  const getBlogs = async (query: string, page:number) => {
     try {
       setLoading(true);
       const temp = await fetchBlogs(page, 50, query);
@@ -54,8 +54,8 @@ const CardList = ({ query, page }: CardListProps) => {
     }
   };
   useEffect(() => {
-    getBlogs(query);
-  }, [query]);
+    getBlogs(query, page);
+  }, [query, page]);
 
   const filteredItems = blogs?.filter((item) => {
     const generatedSource = item.IsGenerated ? "AI" : "ผู้ใช้งาน";
@@ -78,7 +78,7 @@ const CardList = ({ query, page }: CardListProps) => {
       ref={scrollRef}
     >
       <div className="flex flex-nowrap gap-4">
-        {filteredItems?.slice(0, 5).map((blog, index) => (
+        {blogs?.slice(0, 5).map((blog, index) => (
           <CardPost key={index} card={blog} onDelete={deleteBlog} />
         ))}
       </div>
