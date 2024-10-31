@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/free-solid-svg-icons/faShare";
 import axios from "axios";
 import { RecipeResponse } from "./types/menuTypes";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   optional_dish: string;
@@ -25,6 +27,7 @@ const Page: React.FC = () => {
   const [responseData, setResponseData] = useState<RecipeResponse | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
 
   const suppliesOptions = [
     "กระทะ",
@@ -35,6 +38,20 @@ const Page: React.FC = () => {
     "ไมโครเวฟ",
     "เตาย่าง",
     "เตาแก๊ส",
+    "หม้ออบลมร้อน", // Air fryer
+    "หม้อหุงข้าว", // Rice cooker
+    "เครื่องบดสับ", // Food processor
+    "เครื่องกดกาแฟ", // Coffee maker
+    "เตาไฟฟ้า", // Electric stove
+    "อุปกรณ์นึ่ง", // Steamer
+    "เครื่องทำโยเกิร์ต", // Yogurt maker
+    "เตาเผา", // Grill
+    "อุปกรณ์ทำขนม", // Pastry tools
+    "อุปกรณ์ทำพาสต้า", // Pasta maker
+    "กระบอกฉีด", // Piping bag
+    "เครื่องทำไอศกรีม", // Ice cream maker
+    "อุปกรณ์ทำซูชิ", // Sushi making kit
+    "เครื่องทำฟองนม", // Milk frother
   ];
 
   const validateForm = () => {
@@ -95,16 +112,18 @@ const Page: React.FC = () => {
           ingredients: formValues.ingredients,
           supplies: formValues.supplies,
         };
-        console.log("Submission data:", submissionData);
+        // console.log("Submission data:", submissionData);
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_BASE_URL}/generate-recipe/`,
           submissionData
         );
 
         const data: RecipeResponse = response.data;
-
+        console.log("Response data:", data);
         if (data.Menu.error) {
-          setErrorMessage(data.Menu.raw_response || "An unknown error occurred.");
+          setErrorMessage(
+            data.Menu.raw_response || "An unknown error occurred."
+          );
           setResponseData(data);
         } else {
           setResponseData(data);
@@ -124,8 +143,11 @@ const Page: React.FC = () => {
   return (
     <>
       <div className="flex w-full px-14 bg-slate-200 justify-center">
-        <div className="w-2/5 p-12 bg-white rounded-lg shadow-md">
+        <div className="w-2/5 p-12 bg-white rounded-lg shadow-md ">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <div className="text-3xl font-bold mt-4 text-center">
+              สร้างเมนูจาก AI
+            </div>
             {/* Menu Input */}
             <div>
               <label htmlFor="optional_dish" className="text-xl font-semibold">
@@ -160,8 +182,8 @@ const Page: React.FC = () => {
 
             {/* Kitchen Tools Checkboxes */}
             <div className="flex flex-col gap-4">
-            <label htmlFor="optional_dish" className="text-xl font-semibold">
-                เคริ่องครัว
+              <label htmlFor="optional_dish" className="text-xl font-semibold">
+                เครื่องครัว
               </label>
               <div>
                 <input
@@ -214,7 +236,13 @@ const Page: React.FC = () => {
               disabled={isSubmitting}
               className="bg-[#80AA50] text-white py-2 px-4 rounded hover:bg-[#5b7938]"
             >
-              {isSubmitting ? "Submitting..." : "Generate Recipe"}
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} /> Submitting...{" "}
+                </>
+              ) : (
+                "Generate Recipe"
+              )}
             </button>
           </form>
         </div>
@@ -227,7 +255,7 @@ const Page: React.FC = () => {
             </div>
           </div>
         )}
-        {responseData && !errorMessage  && (
+        {responseData && !errorMessage && (
           <div className="w-3/5 px-12 pt-8 flex flex-col gap-4 justify-between ">
             <div className="text-center text-4xl font-bold mb-4">Result!</div>
             {
@@ -255,14 +283,15 @@ const Page: React.FC = () => {
                   (ingredient, index) => (
                     <li key={index}>
                       <a
-                        href={`/search?name=${encodeURIComponent(
+                        href={`/searchIngredient?q=${encodeURIComponent(
                           ingredient.name
                         )}`}
                         className="text-blue-500 hover:underline"
                       >
                         {ingredient.name}
                       </a>{" "}
-                      {ingredient.quantity} {ingredient.preparation != "เตรียมไว้"}
+                      {ingredient.quantity}{" "}
+                      {ingredient.preparation != "เตรียมไว้"}
                     </li>
                   )
                 )}
@@ -283,12 +312,20 @@ const Page: React.FC = () => {
             }
           </div>
         )}
-
       </div>
       {/* Share Button */}
-      {responseData && !errorMessage  && (
+      {responseData && !errorMessage && (
         <div className="flex w-full min-w-[100px] pt-8 justify-end bg-slate-200 text-white ">
-          <button className="mb-4 rounded-[30px] mr-[100px] p-4 px-12 font-bold text-lg bg-[#80AA50]">
+          <button
+            className="mb-4 rounded-[30px] mr-[100px] p-4 px-12 font-bold text-lg bg-[#80AA50]"
+            onClick={() => {
+              router.push(
+                `/createBlog?data=${encodeURIComponent(
+                  JSON.stringify(responseData)
+                )}`
+              );
+            }}
+          >
             <FontAwesomeIcon className="mr-2" icon={faShare} />
             แบ่งปันสูตรนี้
           </button>

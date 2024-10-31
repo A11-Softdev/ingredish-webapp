@@ -2,39 +2,79 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-interface Props {
+import ConfirmationModal from "./ConfirmationModal";
+
+type Props = {
   name: string;
   price: number;
   store: string;
   img: string;
   quantity: number;
-  onQuantityChange: (newQuantity: number) => void;
-  onDelete: () => void;  // Add onDelete prop
-}
+  productId: string;
+  
+  onQuantityChange: (productId: string, newQuantity: number) => void;
+  onDelete: (productId: string) => void;
+  stock: number;
+};
 
-function CartItem({ name, price, store, img, quantity, onQuantityChange, onDelete }: Props) {
-  const [inputValue, setInputValue] = useState<number>(quantity);
+function CartItem({ name, price, store, img, quantity, productId, onQuantityChange, onDelete, stock }: Props) {
+  const [inputValue, setInputValue] = useState<string>(quantity.toString());
+  const [isRemoveModalOpen, setRemoveModalOpen] = useState(false);
+  const [previousQuantity, setPreviousQuantity] = useState<number | null>(null);
 
   const handleDecrement = () => {
-    if (inputValue > 1) {
-      const newQuantity = inputValue - 1;
-      setInputValue(newQuantity);
-      onQuantityChange(newQuantity);
+    const currentQuantity = parseInt(inputValue) || 1;
+    if (currentQuantity > 1) {
+      const newQuantity = currentQuantity - 1;
+      setInputValue(newQuantity.toString());
+      onQuantityChange(productId, newQuantity);
+    } else {
+      setPreviousQuantity(currentQuantity);
+      setRemoveModalOpen(true);
     }
   };
 
   const handleIncrement = () => {
-    const newQuantity = inputValue + 1;
-    setInputValue(newQuantity);
-    onQuantityChange(newQuantity);
+    const currentQuantity = parseInt(inputValue) || 0;
+    if (currentQuantity + 1 <= stock) {
+      const newQuantity = currentQuantity + 1;
+      setInputValue(newQuantity.toString());
+      onQuantityChange(productId, newQuantity);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuantity = parseInt(e.target.value);
-    if (!isNaN(newQuantity) && newQuantity > 0) {
-      setInputValue(newQuantity);
-      onQuantityChange(newQuantity);
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setInputValue(value);
     }
+  };
+
+  const handleBlur = () => {
+    const currentQuantity = parseInt(inputValue);
+    if (!inputValue || currentQuantity === 0) {
+      console.log(0);
+      setPreviousQuantity(1); // Set previous to 1 as fallback
+      setRemoveModalOpen(true); // Open confirmation modal if value is 0
+    } else if (currentQuantity > stock) {
+      setInputValue(stock.toString());
+      onQuantityChange(productId, stock);
+    } else {
+      onQuantityChange(productId, currentQuantity);
+    }
+  };
+
+  const confirmRemove = async () => {
+    onDelete(productId);
+    setRemoveModalOpen(false);
+  };
+
+  const cancelRemove = () => {
+    // Set input back to 1 if the user cancels the deletion
+    setInputValue("1");
+    console.log(1);
+    onQuantityChange(productId, 1);
+    setRemoveModalOpen(false);
   };
 
   return (
@@ -48,10 +88,10 @@ function CartItem({ name, price, store, img, quantity, onQuantityChange, onDelet
       </div>
       <div className="ml-4 w-[50%] flex flex-col gap-2">
         <div className="text-xl font-bold">{name}</div>
-        <div className="">ร้าน : {store}</div>
+        <div>ร้าน : {store}</div>
         <div className="flex w-full items-center">
           <button
-            className="bg-[#EDB307] rounded-full w-[35px] h-[35px] text-red-600"
+            className="bg-[#EDB307] rounded-full w-[35px] h-[35px] text-red-600 text-2xl font-extrabold"
             onClick={handleDecrement}
           >
             -
@@ -60,24 +100,36 @@ function CartItem({ name, price, store, img, quantity, onQuantityChange, onDelet
             className="mx-4 w-1/5 border border-[#EDB307] text-center shadow-lg rounded-lg"
             value={inputValue}
             onChange={handleInputChange}
-            type="number"
+            onBlur={handleBlur}
+            type="text"
           />
           <button
-            className="bg-[#EDB307] rounded-full w-[35px] h-[35px] text-green-600"
+            className="bg-[#EDB307] rounded-full w-[35px] h-[35px] text-green-600 text-2xl font-extrabold"
             onClick={handleIncrement}
           >
             +
           </button>
         </div>
       </div>
-      <div className="ml-auto text-2xl font-bold text-[#EDB307] ">{price * inputValue} ฿</div>
+      <div className="ml-auto text-2xl font-bold text-[#EDB307]">{price * (parseInt(inputValue) || 0)} ฿</div>
       {/* Delete Button */}
       <button
         className="ml-4 bg-red-500 text-white p-3 rounded-lg shadow-lg"
-        onClick={onDelete}  // Call onDelete when clicked
+        onClick={() => {
+          setPreviousQuantity(0);
+          setRemoveModalOpen(true);
+        }}
       >
         <FontAwesomeIcon icon={faTrashCan} />
       </button>
+      {/* Confirmation Modal for Remove or Delete */}
+      <ConfirmationModal
+        title="จะลบสินค้าในตะกร้าหรือไม่?"
+        open={isRemoveModalOpen}
+        setOpen={setRemoveModalOpen}
+        handleSubmit={confirmRemove}
+        handleCancel={cancelRemove}
+      />
     </div>
   );
 }

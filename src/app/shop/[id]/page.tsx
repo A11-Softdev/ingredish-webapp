@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input } from "@nextui-org/react";
+import { image, Input } from "@nextui-org/react";
 import { Tab, Tabs, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import ShopCard from "@/components/ShopCard";
@@ -23,8 +23,10 @@ export default function Page() {
   const [sortedProducts, setSortedProducts] = useState<any[]>([]);
   const [displayedProducts, setDisplayedProducts] = useState<any[]>([]);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${process.env.NEXT_PUBLIC_BASE_URL}/shops/${params.id}`)
       .then((response) => {
@@ -36,12 +38,14 @@ export default function Page() {
           owner: response.data.user.username,
           contact: response.data.contact,
           address: response.data.address,
+          image_url: response.data.image_url,
         });
       })
       .catch((error) => {
         console.error("Error fetching shop data:", error);
         alert("Error fetching shop data");
       });
+    setLoading(false);
   }, [params.id]);
 
   // Filter products by search query
@@ -92,7 +96,7 @@ export default function Page() {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 14;
 
   // Calculate the products to display based on the current page
   const paginatedProducts = displayedProducts.slice(
@@ -104,7 +108,10 @@ export default function Page() {
   const totalPages = Math.ceil(displayedProducts.length / itemsPerPage);
 
   // Handle page change
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
     setCurrentPage(page);
   };
 
@@ -159,11 +166,32 @@ export default function Page() {
       </div>
 
       {/* Product List */}
-      <div className="flex flex-col gap-4 lg:grid grid-cols-2 mt-2">
-        {displayedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} manage={false} />
-        ))}
+      <div className="flex flex-col gap-4 mt-2 p-4">
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex justify-center items-center h-[50vh] w-full">
+            <div className="text-center text-gray-500">Loading...</div>
+          </div>
+        ) : paginatedProducts.length > 0 ? (
+          <div className="lg:grid grid-cols-2 gap-4">
+            {paginatedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} manage={false} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 w-full h-[50vh] flex flex-col items-center justify-center">
+            {/* Image when no items are available */}
+            <img
+              src="https://static.thenounproject.com/png/4532229-200.png" // Replace with the actual image path
+              alt="No items available"
+              className="mb-4 h-24 w-24 object-contain" // Adjust size as needed
+            />
+            <div>ไม่พบสินค้า</div>
+          </div>
+        )}
       </div>
+
+      {/* Pagination */}
       <div className="flex justify-center my-10 space-x-2 w-full">
         <Pagination
           count={totalPages}
