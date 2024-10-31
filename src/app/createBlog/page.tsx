@@ -1,18 +1,10 @@
-"use client";
+"use client"
 import React, { useState, useRef, useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import CreateIcon from "@mui/icons-material/Create";
-import { createBlogApi } from "@/app/createBlog/api/createBlog";
-import { uploadBlogImage } from "@/utils/uploadImage";
-import { compressImage } from "@/utils/uploadImage";
-import { toast } from "react-hot-toast";
-import { Upload } from "lucide-react";
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { ChefHat, Upload, Plus, Clock, Users, Utensils, FileText, Save } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { compressImage, uploadBlogImage } from "@/utils/uploadImage";
+import toast from "react-hot-toast";
+import { createBlogApi } from "./api/createBlog";
 
 const CreateBlog = () => {
   const router = useRouter();
@@ -21,7 +13,7 @@ const CreateBlog = () => {
     ? JSON.parse(decodeURIComponent(searchParams.get("data")!))
     : null;
   const recipeData = data?.Menu;
-  console.log("Recipe : ",recipeData);
+
   // States
   const [ingredient, setIngredients] = useState<string[]>(
     recipeData?.Recipe.Ingredients.map(
@@ -34,15 +26,12 @@ const CreateBlog = () => {
       (step: { description: string }) => step.description
     ) || [""]
   );
+
   const [kitchenWare, setKitchenWare] = useState([""]);
   const [name, setName] = useState(recipeData?.MenuItem.Name || "");
-  const [description, setDescription] = useState(
-    recipeData?.MenuItem.Description || ""
-  );
+  const [description, setDescription] = useState(recipeData?.MenuItem.Description || "");
   const [serve, setServe] = useState(1);
-  const [time, setTime] = useState(
-    recipeData?.MenuItem.EstimatedTimeCook || ""
-  );
+  const [time, setTime] = useState(recipeData?.MenuItem.EstimatedTimeCook || "");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -74,7 +63,7 @@ const CreateBlog = () => {
     }
   };
 
-  // Functions to handle input updates
+  // Form update handlers
   const addIngredient = () => setIngredients([...ingredient, ""]);
   const updateIngredient = (index: number, value: string) => {
     const newIngredients = [...ingredient];
@@ -96,6 +85,7 @@ const CreateBlog = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       let image_url = "";
       if (imageFile) {
         setIsUploading(true);
@@ -104,6 +94,7 @@ const CreateBlog = () => {
         });
         setIsUploading(false);
       }
+
       const blogData = {
         image_url,
         name,
@@ -116,59 +107,56 @@ const CreateBlog = () => {
         IsGenerated,
       };
 
-      const response = await createBlogApi.createBlog(blogData);
-      setSuccess("Blog created successfully!");
-      setError(null); // Clear any previous errors
+      await createBlogApi.createBlog(blogData);
+      toast.success("Blog created successfully!");
+      router.push("/feedHome");
     } catch (error: any) {
-      setError(error.message || "Failed to create blog.");
-      setSuccess(null); // Clear any previous success message
+      toast.error(error.message || "Failed to create blog.");
     } finally {
       setIsLoading(false);
       setIsUploading(false);
       setUploadProgress(0);
     }
-    router.push("/feedHome");
   };
 
   return (
-    <div className="flex justify-center h-full">
-      <div className="bg-white text-black w-4/5 flex flex-col items-center">
-        <h1 className="text-4xl font-semibold m-6 text-center">
-          Share The Recipe
-          <br />
-          You Discovered!
-        </h1>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+        <div className="text-center mb-8">
+          <ChefHat className="w-16 h-16 mx-auto text-yellow-400 mb-4" />
+          <h1 className="text-3xl font-bold text-gray-800">
+            Share Your Recipe
+          </h1>
+          <p className="text-gray-600 mt-2">Spread the joy of cooking with others</p>
+        </div>
 
-        {/* Upload Image */}
-        <div className="flex justify-center">
-          <div className="relative w-64 h-64">
+        {/* Image Upload */}
+        <div className="mb-8">
+          <div className="relative w-full h-72 rounded-xl overflow-hidden bg-gray-100">
             <button
-              type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full h-full rounded-2xl overflow-hidden bg-[#80AA50] hover:bg-[#6d9343] transition-colors duration-200 flex flex-col items-center justify-center relative"
+              className={`w-full h-full flex flex-col items-center justify-center ${!imagePreview ? 'hover:bg-gray-200 transition-colors' : ''
+                }`}
               disabled={isUploading}
             >
               {imagePreview ? (
                 <>
-                  <Image
+                  <img
                     src={imagePreview}
-                    alt="Preview"
-                    fill
-                    className="object-cover"
+                    alt="Recipe preview"
+                    className="w-full h-full object-cover"
                   />
                   {isUploading && (
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
+                    <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
                       <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin" />
-                      <p className="text-white mt-2">
-                        {Math.round(uploadProgress)}%
-                      </p>
+                      <p className="text-white mt-2">{Math.round(uploadProgress)}%</p>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="text-white flex flex-col items-center">
-                  <Upload className="h-12 w-12" />
-                  <span className="mt-2">Upload Image</span>
+                <div className="text-gray-500 flex flex-col items-center">
+                  <Upload className="w-12 h-12 mb-2" />
+                  <span>Upload Recipe Image</span>
                 </div>
               )}
             </button>
@@ -183,143 +171,162 @@ const CreateBlog = () => {
           </div>
         </div>
 
-        {/* Title Input */}
-        <TextField
-          id="title"
-          label="Title"
-          multiline
-          maxRows={2}
-          className="w-80 my-2"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        {/* Basic Information */}
+        <div className="space-y-6">
+          {/* Title & Description */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Recipe Title</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                placeholder="Enter recipe title"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                placeholder="Describe your recipe"
+              />
+            </div>
+          </div>
 
-        {/* Description Input */}
-        <TextField
-          id="description"
-          label="Description"
-          multiline
-          rows={4}
-          className="w-80 my-2"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          {/* Serving & Time */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Servings</label>
+              <div className="relative">
+                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="number"
+                  value={serve}
+                  onChange={(e) => setServe(parseInt(e.target.value))}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="Number of servings"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cooking Time</label>
+              <div className="relative">
+                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. 30 mins"
+                />
+              </div>
+            </div>
+          </div>
 
-        {/* Serves and Time Inputs */}
-        <div className="w-80 flex justify-between">
-          <TextField
-            label="How many serves?"
-            id="serves"
-            type="number"
-            value={serve}
-            onChange={(e) => setServe(parseInt(e.target.value))}
-            className="w-32 my-2"
-          />
-          <TextField
-            label="How long?(hh:mm)"
-            id="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="w-32 my-2"
-          />
+          {/* Ingredients */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-800">Ingredients</h2>
+              <button
+                onClick={addIngredient}
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Add Ingredient
+              </button>
+            </div>
+            <div className="space-y-3">
+              {ingredient.map((item, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  value={item}
+                  onChange={(e) => updateIngredient(index, e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder={`Ingredient ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Kitchen Tools */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-800">Kitchen Tools</h2>
+              <button
+                onClick={addKitchenWare}
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Add Tool
+              </button>
+            </div>
+            <div className="space-y-3">
+              {kitchenWare.map((item, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  value={item}
+                  onChange={(e) => updateKitchenWare(index, e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder={`Tool ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Instructions */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-800">Instructions</h2>
+              <button
+                onClick={addStep}
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Add Step
+              </button>
+            </div>
+            <div className="space-y-3">
+              {steps.map((step, index) => (
+                <div key={index} className="relative">
+                  <span className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-sm font-medium">
+                    {index + 1}
+                  </span>
+                  <input
+                    type="text"
+                    value={step}
+                    onChange={(e) => updateStep(index, e.target.value)}
+                    className="w-full pl-14 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                    placeholder={`Step ${index + 1}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="pt-6">
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading || isUploading}
+              className="w-full py-3 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isLoading ? (
+                <div className="w-6 h-6 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Save className="w-5 h-5" />
+                  Create Recipe
+                </>
+              )}
+            </button>
+          </div>
         </div>
-
-        {/* Ingredients */}
-        <h2 className="w-80 flex justify-center text-2xl font-medium my-3 pt-2 border-t-4 border-yellow-400">
-          Ingredients
-        </h2>
-        <div className="flex flex-col items-center">
-          {ingredient.map((ingredient, index) => (
-            <TextField
-              key={index}
-              type="text"
-              value={ingredient}
-              onChange={(e) => updateIngredient(index, e.target.value)}
-              label={index + 1}
-              className="my-2"
-            />
-          ))}
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={addIngredient}
-            className="bg-yellow-400 text-black mb-2"
-          >
-            ADD
-          </Button>
-        </div>
-
-        {/* KitchenWare */}
-        <h2 className="w-80 flex justify-center text-2xl font-medium my-3 pt-2 border-t-4 border-yellow-400">
-          KitchenWare
-        </h2>
-        <div className="flex flex-col items-center">
-          {kitchenWare.map((item, index) => (
-            <TextField
-              key={index}
-              type="text"
-              value={item}
-              onChange={(e) => updateKitchenWare(index, e.target.value)}
-              label={index + 1}
-              className="my-2"
-            />
-          ))}
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={addKitchenWare}
-            className="bg-yellow-400 text-black mb-2"
-          >
-            ADD
-          </Button>
-        </div>
-
-        {/* Instructions */}
-        <h2 className="w-80 flex justify-center text-2xl font-medium my-3 pt-2 border-t-4 border-yellow-400">
-          Instructions
-        </h2>
-        <div className="flex flex-col items-center">
-          {steps.map((step, index) => (
-            <TextField
-              key={index}
-              type="text"
-              value={step}
-              onChange={(e) => updateStep(index, e.target.value)}
-              label={`Step ${index + 1}`}
-              className="my-2"
-            />
-          ))}
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={addStep}
-            className="bg-yellow-400 text-black mb-2"
-          >
-            ADD
-          </Button>
-        </div>
-
-        {/* IsGenerated Checkbox */}
-        <FormControlLabel
-          control={<Checkbox checked={IsGenerated} disabled />}
-          label="Generated Recipe"
-          className="w-80"
-        />
-
-        {/* Submit Button */}
-        <Button
-          variant="contained"
-          startIcon={<CreateIcon />}
-          onClick={handleSubmit}
-          className="bg-yellow-400 text-black mb-2"
-          disabled={isLoading || isUploading}
-        >
-          Create Blog
-        </Button>
-
-        {/* Error and Success Messages */}
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
       </div>
     </div>
   );
